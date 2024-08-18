@@ -1,0 +1,5 @@
+name=The Alcoholic
+poster=poster.png
+id=thealcoholic
+description=It's the end of the world, might as well be drunk!
+require=modoptions
