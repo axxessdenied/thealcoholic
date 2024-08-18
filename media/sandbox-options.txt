@@ -1,0 +1,110 @@
+VERSION = 1,
+
+option thealcoholic.headaches {
+    type = boolean,
+    default = true,
+    page = thealcoholic,
+    translation = thealcoholic_headaches,
+}
+
+option thealcoholic.withdrawal {
+    type = boolean,
+    default = true,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawal,
+}
+
+option thealcoholic.dynamic {
+    type = boolean,
+    default = true,
+    page = thealcoholic,
+    translation = thealcoholic_dynamic,
+}
+
+option thealcoholic.withdrawal_phase1 {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawal_phase1,
+}
+
+option thealcoholic.withdrawal_phase2 {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawal_phase2,
+}
+
+option thealcoholic.withdrawal_phase3 {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawal_phase3,
+}
+
+option thealcoholic.withdrawal_phase4 {
+    type = enum,
+    numValues = 5,
+    default = 4,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawal_phase4,
+}
+
+option thealcoholic.daystolose {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_daystolose,
+}
+
+option thealcoholic.thresholdtogain {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_thresholdtogain,
+}
+
+option thealcoholic.poisondamage {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_poisondamage,
+}
+
+option thealcoholic.headachedamage {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_headachedamage,
+}
+
+option thealcoholic.headachechance {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = thealcoholic,
+    translation = thealcoholic_headachechance,
+}
+
+option thealcoholic.withdrawalchance {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawalchance,
+}
+
+option thealcoholic.maxstress {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_maxstress,
+}

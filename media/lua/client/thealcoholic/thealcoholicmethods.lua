@@ -126,37 +126,45 @@ end
 function TheAlcoholic.drunkResistance(player)
     if player:HasTrait("Alcoholic") 
     then
-        player:getStats():setDrunkenness(player:getStats():getDrunkenness() * 0.5)
+        player:getStats():setDrunkenness(player:getStats():getDrunkenness() * 0.65)
     end
 end
 
 function TheAlcoholic.drankAlcohol(player)
-    local player = player
-    player:getModData().AlcoholicHasDrank = true;
-    player:getModData().AlcoholicTimeSinceLastDrink = 0;
-    player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold + 48;
-    if player:getModData().AlcoholicThreshold > THEALCOHOLIC.VALUES.drop9[THEALCOHOLIC.SETTINGS.options.drop9]+1
+    if getTimestampMs() - player:getModData().LastDrinkTimestamp < 5000
     then
-        player:getModData().AlcoholicThreshold = THEALCOHOLIC.VALUES.drop9[THEALCOHOLIC.SETTINGS.options.drop9]+1
+        return
+    end
+
+    player:getModData().LastDrinkTimestamp = getTimestampMs()
+
+    print("Drank alcohol")
+    player:getModData().AlcoholicHasDrank = true
+    player:getModData().AlcoholicTimeSinceLastDrink = 0
+    player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold + 48
+    if player:getModData().AlcoholicThreshold > TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]+1
+    then
+        player:getModData().AlcoholicThreshold = TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]+1
     end
     player:getModData().AlcoholicStress = 0;
     TheAlcoholic.drunkResistance(player);
 end
 
 function TheAlcoholic.noDrinkAlcohol(player)
-    player:getModData().AlcoholicTimeSinceLastDrink = player:getModData().AlcoholicTimeSinceLastDrink + 1;
-    if player:getModData().AlcoholicTimeSinceLastDrink > THEALCOHOLIC.VALUES.drop8[THEALCOHOLIC.SETTINGS.options.drop8]+1
+    print("Did not drink alcohol this hour")
+    player:getModData().AlcoholicTimeSinceLastDrink = player:getModData().AlcoholicTimeSinceLastDrink + 1
+    if player:getModData().AlcoholicTimeSinceLastDrink > TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose]+1
     then
-        player:getModData().AlcoholicTimeSinceLastDrink = THEALCOHOLIC.VALUES.drop8[THEALCOHOLIC.SETTINGS.options.drop8]+1
+        player:getModData().AlcoholicTimeSinceLastDrink = TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose]+1
     end
-    player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold - 1;
+    player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold - 1
     if player:getModData().AlcoholicThreshold < 0
     then
         player:getModData().AlcoholicThreshold = 0
     end
-    player:getModData().AlcoholicStress = player:getModData().AlcoholicStress + 0.005;
-    if player:getModData().AlcoholicStress > THEALCOHOLIC.VALUES.drop14[THEALCOHOLIC.SETTINGS.options.drop14]
+    player:getModData().AlcoholicStress = player:getModData().AlcoholicStress + 0.005
+    if player:getModData().AlcoholicStress > TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
     then
-        player:getModData().AlcoholicStress = THEALCOHOLIC.VALUES.drop14[THEALCOHOLIC.SETTINGS.options.drop14]
+        player:getModData().AlcoholicStress = TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
     end
 end

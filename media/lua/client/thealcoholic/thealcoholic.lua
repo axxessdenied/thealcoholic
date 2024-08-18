@@ -36,6 +36,16 @@ local function init2(player)
         then
             player:getModData().AlcoholicHasDrank = false
         end
+
+        if player:getModData().AlcoholicTolerance == nil
+        then
+            player:getModData().AlcoholicTolerance = 0
+        end
+
+        if player:getModData().LastDrinkTimestamp == nil
+        then
+            player:getModData().LastDrinkTimestamp = 0
+        end
         player:getModData().AlcoholicInit2 = true
     end
 end
@@ -49,7 +59,7 @@ function TheAlcoholic.OnCreatePlayer(playernum, character)
 
     if player:HasTrait("Alcoholic")
     then
-        player:getInventory():AddItem("Base.BeerEmpty") -- finished bottle for the drunkard
+        player:getInventory():AddItem("Base.WhiskeyFull") -- finished bottle for the drunkard
     end
 end
 
@@ -71,6 +81,37 @@ function TheAlcoholic.OnBoot()
     end
 end
 
+TheAlcoholic.values = {
+    withdrawal_phase1 = {12,18,24,48},      --phase 1
+    withdrawal_phase2 = {24,48,72,96},      --phase 2
+    withdrawal_phase3 = {48,72,96,120},     --phase 3
+    withdrawal_phase4 = {72,96,120,144,168},--phase 4
+    daystolose = {504,672,1344,1920},       --sober values
+    thresholdtogain = {200,400,800,1600},   --threshold values
+    poison = {25,35,45,55},                 --poison values
+    headachedmg = {30,50,65,80},            --headache values
+    headachechance = {10,7,5,3},            --headache chance
+    withdrawal_chance = {10,7,5,2},         --withdrawal sickness chance
+    maxstress = {0.3,0.5,0.7,0.9},          --max alcoholic stress
+}
+
+TheAlcoholic.options = {
+    headaches = getSandboxOptions():getOptionByName("thealcoholic.headaches"):getValue(),
+    withdrawal = getSandboxOptions():getOptionByName("thealcoholic.withdrawal"):getValue(),
+    dynamic = getSandboxOptions():getOptionByName("thealcoholic.dynamic"):getValue(),
+    withdrawal_phase1 = getSandboxOptions():getOptionByName("thealcoholic.withdrawal_phase1"):getValue(),
+    withdrawal_phase2 = getSandboxOptions():getOptionByName("thealcoholic.withdrawal_phase2"):getValue(),
+    withdrawal_phase3 = getSandboxOptions():getOptionByName("thealcoholic.withdrawal_phase3"):getValue(),
+    withdrawal_phase4 = getSandboxOptions():getOptionByName("thealcoholic.withdrawal_phase4"):getValue(),
+    daystolose = getSandboxOptions():getOptionByName("thealcoholic.daystolose"):getValue(),
+    thresholdtogain = getSandboxOptions():getOptionByName("thealcoholic.thresholdtogain"):getValue(),
+    poison = getSandboxOptions():getOptionByName("thealcoholic.poisondamage"):getValue(),
+    headachedmg = getSandboxOptions():getOptionByName("thealcoholic.headachedamage"):getValue(),
+    headachechance = getSandboxOptions():getOptionByName("thealcoholic.headachechance"):getValue(),
+    withdrawal_chance = getSandboxOptions():getOptionByName("thealcoholic.withdrawalchance"):getValue(),
+    maxstress = getSandboxOptions():getOptionByName("thealcoholic.maxstress"):getValue(),
+}
+
 -- update event to handle the alcoholic trait
 function TheAlcoholic.OnTraitUpdate()
     for i=0, getNumActivePlayers()-1 do
@@ -86,67 +127,67 @@ function TheAlcoholic.OnTraitUpdate()
             if player:HasTrait("Alcoholic") 
             then
 
-                local timeSinceDrink = player:getModData().AlcoholicTimeSinceLastDrink;
+                local timeSinceDrink = player:getModData().AlcoholicTimeSinceLastDrink
                 
                 -- debug
-                print("Hours since last drink:"..timeSinceDrink);
-                print("Alcoholic stress level:"..player:getModData().AlcoholicStress);
+                print("Hours since last drink:"..timeSinceDrink)
+                print("Alcoholic stress level:"..player:getModData().AlcoholicStress)
                 -- end debug
-                
-                if timeSinceDrink > THEALCOHOLIC.VALUES.drop4[THEALCOHOLIC.SETTINGS.options.drop4] and timeSinceDrink <= THEALCOHOLIC.VALUES.drop5[THEALCOHOLIC.SETTINGS.options.drop5]
+            
+                if timeSinceDrink > TheAlcoholic.values.withdrawal_phase1[TheAlcoholic.options.withdrawal_phase1] and timeSinceDrink <= TheAlcoholic.values.withdrawal_phase2[TheAlcoholic.options.withdrawal_phase2]
                 then
                     TheAlcoholic.increaseStress(player, 0.10)
                     TheAlcoholic.increaseFatigue(player, 0.05, ZombRand(7))
                     TheAlcoholic.decreaseHappiness(player, 2)
-                elseif timeSinceDrink > THEALCOHOLIC.VALUES.drop5[THEALCOHOLIC.SETTINGS.options.drop5] and timeSinceDrink <= THEALCOHOLIC.VALUES.drop6[THEALCOHOLIC.SETTINGS.options.drop6]
+                elseif timeSinceDrink > TheAlcoholic.values.withdrawal_phase2[TheAlcoholic.options.withdrawal_phase2] and timeSinceDrink <= TheAlcoholic.values.withdrawal_phase3[TheAlcoholic.options.withdrawal_phase3]
                 then
                     TheAlcoholic.increaseStress(player, 0.15)
                     TheAlcoholic.increaseFatigue(player, 0.05, ZombRand(4))
                     TheAlcoholic.decreaseHappiness(player, 6)
-                    if (THEALCOHOLIC.SETTINGS.options.box1) == true
+                    if TheAlcoholic.options.headaches == true
                     then
-                        TheAlcoholic.increasePain(player, "Head", ZombRand(THEALCOHOLIC.VALUES.drop11[THEALCOHOLIC.SETTINGS.options.drop11]), ZombRand(THEALCOHOLIC.VALUES.drop11[THEALCOHOLIC.SETTINGS.options.drop11]))
+                        TheAlcoholic.increasePain(player, "Head", ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]), ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]))
                     end
-                elseif timeSinceDrink > THEALCOHOLIC.VALUES.drop6[THEALCOHOLIC.SETTINGS.options.drop6] and timeSinceDrink <= THEALCOHOLIC.VALUES.drop7[THEALCOHOLIC.SETTINGS.options.drop7]
+                elseif timeSinceDrink > TheAlcoholic.values.withdrawal_phase3[TheAlcoholic.options.withdrawal_phase3] and timeSinceDrink <= TheAlcoholic.values.withdrawal_phase4[TheAlcoholic.options.withdrawal_phase4]
                 then
                     TheAlcoholic.increaseStress(player, 0.25)
                     TheAlcoholic.increaseFatigue(player, 0.05, ZombRand(3))
                     TheAlcoholic.decreaseHappiness(player, 7)
-                    if (THEALCOHOLIC.SETTINGS.options.box1) == true
+                    if TheAlcoholic.options.headaches == true
                     then
-                        TheAlcoholic.increasePain(player, "Head", ZombRand(THEALCOHOLIC.VALUES.drop11[THEALCOHOLIC.SETTINGS.options.drop11]+10), ZombRand(THEALCOHOLIC.VALUES.drop11[THEALCOHOLIC.SETTINGS.options.drop11]-1))
+                        TheAlcoholic.increasePain(player, "Head", ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]+10), ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]-1))
                     end
-                    if (THEALCOHOLIC.SETTINGS.options.box2) == true
+                    if TheAlcoholic.options.withdrawal == true
                     then
-                        TheAlcoholic.increasePoison(player, ZombRand(THEALCOHOLIC.VALUES.drop10[THEALCOHOLIC.SETTINGS.options.drop10]), ZombRand(THEALCOHOLIC.VALUES.drop12[THEALCOHOLIC.SETTINGS.options.drop12]))
+                        TheAlcoholic.increasePoison(player, ZombRand(TheAlcoholic.values.poison[TheAlcoholic.options.poison]), ZombRand(TheAlcoholic.values.headachechance[TheAlcoholic.options.headachechance]))
                     end
-                elseif timeSinceDrink > THEALCOHOLIC.VALUES.drop7[THEALCOHOLIC.SETTINGS.options.drop7] and timeSinceDrink <= THEALCOHOLIC.VALUES.drop8[THEALCOHOLIC.SETTINGS.options.drop8]
+                elseif timeSinceDrink > TheAlcoholic.values.withdrawal_phase4[TheAlcoholic.options.withdrawal_phase4] and timeSinceDrink <= TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose]
                 then
                     TheAlcoholic.increaseStress(player, 0.3)
                     TheAlcoholic.increaseFatigue(player, 0.1, ZombRand(2))
                     TheAlcoholic.decreaseHappiness(player, 10)
-                    if (THEALCOHOLIC.SETTINGS.options.box1) == true
+                    if TheAlcoholic.options.headaches == true
                     then
-                        TheAlcoholic.increasePain(player, "Head", ZombRand(THEALCOHOLIC.VALUES.drop11[THEALCOHOLIC.SETTINGS.options.drop11]+15), ZombRand(THEALCOHOLIC.VALUES.drop11[THEALCOHOLIC.SETTINGS.options.drop11]-2))
+                        TheAlcoholic.increasePain(player, "Head", ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]+15), ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]-2))
                     end
-                    if (THEALCOHOLIC.SETTINGS.options.box2) == true
+                    if TheAlcoholic.options.withdrawal == true
                     then
-                        TheAlcoholic.increasePoison(player, ZombRand(THEALCOHOLIC.VALUES.drop10[THEALCOHOLIC.SETTINGS.options.drop10]+20), ZombRand(THEALCOHOLIC.VALUES.drop12[THEALCOHOLIC.SETTINGS.options.drop12]-1))
+                        TheAlcoholic.increasePoison(player, ZombRand(TheAlcoholic.values.poison[TheAlcoholic.options.poison]+20), ZombRand(TheAlcoholic.values.headachechance[TheAlcoholic.options.headachechance]-1))
                     end
-                elseif timeSinceDrink > THEALCOHOLIC.VALUES.drop8[THEALCOHOLIC.SETTINGS.options.drop8] and (THEALCOHOLIC.SETTINGS.options.box3) == true
+                elseif timeSinceDrink > TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose] and TheAlcoholic.options.dynamic == true
                 then
                     player:getTraits():remove("Alcoholic");
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicLost"), true, HaloTextHelper.getColorGreen());
                 end
             else
-                if player:getModData().AlcoholicThreshold > THEALCOHOLIC.VALUES.drop9[THEALCOHOLIC.SETTINGS.options.drop9]  and (THEALCOHOLIC.SETTINGS.options.box3) == true
+                if player:getModData().AlcoholicThreshold > TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]  and TheAlcoholic.options.dynamic == true
                 then
                     player:getTraits():add("Alcoholic");
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic"), true, HaloTextHelper.getColorRed());
                 end
             end
         end
-    end 
+    end
 end
 
 function TheAlcoholic.OnStressCheck()
@@ -160,6 +201,8 @@ function TheAlcoholic.OnStressCheck()
 
     timeCheck_stress = timestamp + timeCheck_stressDelta / timeMultiplier
     previousTimeMultiplier_stress = timeMultiplier
+
+    print()
     for i=0, getNumActivePlayers()-1 do
         local player = getSpecificPlayer(i)
         if player and player:isAlive()
@@ -172,21 +215,6 @@ function TheAlcoholic.OnStressCheck()
     end
 end
 
--- hook into ISDrinkFromBottle
-
-local ISDrinkFromBottle_perform = ISDrinkFromBottle.perform
-
-function ISDrinkFromBottle:perform()
-    local isAlcoholic = self.item:isAlcoholic()
-    ISDrinkFromBottle_perform(self)
-    if isAlcoholic
-    then
-        TheAlcoholic.drankAlcohol(self.character)
-    end
-end
-
-
-
 
 -- SET EVENT HANDLERS
 
@@ -195,3 +223,14 @@ Events.OnGameBoot.Add(TheAlcoholic.OnBoot)
 Events.OnTick.Add(TheAlcoholic.OnStressCheck)
 Events.EveryHours.Add(TheAlcoholic.OnTraitUpdate)
 
+-- ACTIONS
+
+local base_perform_eat = ISEatFoodAction.perform
+
+function ISEatFoodAction:perform()
+    base_perform_eat(self)
+    if self.item:isAlcoholic()
+    then
+        TheAlcoholic.drankAlcohol(self.character)
+    end
+end

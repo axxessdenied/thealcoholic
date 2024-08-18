@@ -5,4 +5,3 @@ authors=axxessdenied
 modversion=0.8
 id=thealcoholic
 description=It's the end of the world, might as well be drunk!
-require=modoptions
