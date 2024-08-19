@@ -1,5 +1,13 @@
 VERSION = 1,
 
+option thealcoholic.spawnitem = {
+    type = enum,
+    default = 2,
+    numValues = 10,
+    page = thealcoholic,
+    translation = thealcoholic_spawnitem,
+}
+
 option thealcoholic.headaches {
     type = boolean,
     default = true,
@@ -19,6 +27,13 @@ option thealcoholic.dynamic {
     default = true,
     page = thealcoholic,
     translation = thealcoholic_dynamic,
+}
+
+option thealcoholic.tolerance {
+    type = boolean,
+    default = false,
+    page = thealcoholic,
+    translation = thealcoholic_tolerance,
 }
 
 option thealcoholic.withdrawal_phase1 {
