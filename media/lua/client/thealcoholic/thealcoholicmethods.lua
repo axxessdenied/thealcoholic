@@ -6,10 +6,12 @@ function TheAlcoholic.increaseFatigue(player, fatigue, chance)
     if chance == 0
     then
         local currentFatigue = player:getStats():getFatigue()
-        player:getStats():setFatigue(currentFatigue + fatigue)
-        if player:getStats():getFatigue() > 0.99
+
+        if currentFatigue + fatigue > 0.99
         then
             player:getStats():setFatigue(0.99)
+        else
+            player:getStats():setFatigue(currentFatigue + fatigue)
         end
     end
 end
@@ -18,43 +20,48 @@ function TheAlcoholic.decreaseEndurance(player, endurance, chance)
     if chance == 0
     then
         local currentEndurance = player:getStats():getEndurance()
-        player:getStats():setEndurance(currentEndurance - endurance)
-        if player:getStats():getEndurance() < 0
+
+        if currentEndurance < endurance
         then
             player:getStats():setEndurance(0)
+        else
+            player:getStats():setEndurance(currentEndurance - endurance)
         end
     end
 end
 
 function TheAlcoholic.increaseStress(player, stress)
-    local currentStress = player:getStats():getStress()
-    player:getStats():setStress(currentStress + stress)
-    if player:getStats():getStress() > 0.99
+    local currentStress = player:getStats():getStress() - player:getStats():getStressFromCigarettes() 
+    if currentStress + stress > 0.99
     then
         player:getStats():setStress(0.99)
+    else
+        player:getStats():setStress(currentStress + stress)
     end
 end
 
 function TheAlcoholic.decreaseStress(player, stress)
-    local currentStress = player:getStats():getStress()
-    player:getStats():setStress(currentStress - stress)
-    if player:getStats():getStress() < 0
+    local currentStress = player:getStats():getStress() - player:getStats():getStressFromCigarettes() 
+
+    if currentStress < stress
     then
-        player:getStats():setStress(0);
+        player:getStats():setStress(0)
+    else
+        player:getStats():setStress(currentStress - stress)
     end
 end
 
 function TheAlcoholic.alcoholicStress(player)
-    local currentStress = player:getStats():getStress()
-    if currentStress < player:getModData().AlcoholicStress
-    then
-        player:getStats():setStress(player:getModData().AlcoholicStress)
-    end
+    -- remove other stress factors
+    local currentStress = player:getStats():getStress() - player:getStats():getStressFromCigarettes() - player:getModData().AlcoholicPrevStress
+    player:getModData().AlcoholicPrevStress = player:getModData().AlcoholicStress
+    player:getStats():setStress(currentStress + player:getModData().AlcoholicStress)
+    
 end
 
 function TheAlcoholic.increaseHappiness(player, happiness)
     local currentHappiness = player:getBodyDamage():getUnhappynessLevel()
-    if happiness > currentHappiness
+    if currentHappiness < happiness
     then
         player:getBodyDamage():setUnhappynessLevel(0)
     else
@@ -63,7 +70,6 @@ function TheAlcoholic.increaseHappiness(player, happiness)
 end
 
 function TheAlcoholic.decreaseHappiness(player, unhappiness)
-    print("Decreasing happiness for player " .. player:getUsername())
     local bodyDamage = player:getBodyDamage()
     local temp = bodyDamage:getBoredomLevel()
     local currentUnhappiness = player:getBodyDamage():getUnhappynessLevel()
@@ -76,16 +82,31 @@ function TheAlcoholic.decreaseHappiness(player, unhappiness)
 end
 
 function TheAlcoholic.increasePain(player, bodyPart, pain, chance)
-    if chance == 0 
+    if chance == 0
     then
         local bodyPartType = BodyPartType.FromString(bodyPart)
         local playerBodyPart = player:getBodyDamage():getBodyPart(bodyPartType)
         local currentPain = playerBodyPart:getPain()
-        playerBodyPart:setAdditionalPain(currentPain + pain)
-        if playerBodyPart:getPain() > 99 
+
+        if currentPain + pain > 99
         then
             playerBodyPart:setAdditionalPain(99)
+        else
+            playerBodyPart:setAdditionalPain(currentPain + pain)
         end
+    end
+end
+
+function TheAlcoholic.decreasePain(player, bodyPart, pain)
+    local bodyPartType = BodyPartType.FromString(bodyPart)
+    local playerBodyPart = player:getBodyDamage():getBodyPart(bodyPartType)
+    local currentPain = playerBodyPart:getPain()
+
+    if currentPain < pain
+    then
+        playerBodyPart:setAdditionalPain(0)
+    else
+        playerBodyPart:setAdditionalPain(currentPain - pain)
     end
 end
 
@@ -126,21 +147,64 @@ function TheAlcoholic.increasePoison(player, poison, chance)
     end
 end
 
+function TheAlcoholic.increaseWithdrawalSicness(player, sickness, chance)
+    local currentWithdrawalSickness = player:getBodyDamage():getWithdrawalSicknessLevel()
+    if chance == 0
+    then
+        player:getModData().AlcoholicWithdrawalSickness = player:getModData().AlcoholicWithdrawalSickness + sickness
+    end
+end
+
+function TheAlcoholic.removeWithdrawalSickness(player)
+    player:getModData().AlcoholicWithdrawalSickness = 0
+    --stress
+    local stress = player:getStats():getStress()
+    player:getStats():setStress(stress * 0.5)
+    --happiness
+    local happiness = player:getBodyDamage():getUnhappynessLevel()
+    player:getBodyDamage():setUnhappynessLevel(happiness * 0.5)
+    --fatigue
+    local fatigue = player:getStats():getFatigue()
+    player:getStats():setFatigue(fatigue * 0.5)
+    --headaches
+    if TheAlcoholic.options.headaches == true
+    then
+        local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head")):getPain()
+        player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head")):setAdditionalPain(head * 0.5)
+    end
+end
+
 function TheAlcoholic.decreaseSanity(player, sanity, chance)
     local currentSanity = player:getStats():getSanity()
 end
 
--- reduces how drunk we are by half
+-- reduces how drunk 
 function TheAlcoholic.drunkResistance(player)
-    if player:HasTrait("Alcoholic") 
+    local resistance = TheAlcoholic.values.base_tolerance[TheAlcoholic.options.base_tolerance] + player:getModData().AlcoholicThreshold
+    if player:HasTrait("Alcoholic")
     then
-        player:getStats():setDrunkenness(player:getStats():getDrunkenness() * 0.65)
+        player:getStats():setDrunkenness(player:getStats():getDrunkenness() * resistance)
     end
 end
 
 function TheAlcoholic.alcoholicDrankAlcohol(player)
     TheAlcoholic.drunkResistance(player)
-    -- todo: add more effects
+    TheAlcoholic.decreaseStress(player, TheAlcoholic.values.stress_per_drink[TheAlcoholic.options.stress_per_drink])
+    if TheAlcoholic.options.happiness == true
+    then
+        TheAlcoholic.increaseHappiness(player, TheAlcoholic.values.happiness_per_drink[TheAlcoholic.options.happiness_per_drink])
+    end
+    if TheAlcoholic.options.headaches == true
+    then
+        TheAlcoholic.decreasePain(player, "Head", TheAlcoholic.values.pain_per_drink[TheAlcoholic.options.pain_per_drink])
+    end
+    if TheAlcoholic.options.withdrawal == true
+    then
+        if player:getModData().AlcoholicWithdrawalPhase > 0
+        then
+            TheAlcoholic.removeWithdrawalSickness(player)
+        end
+    end
 end
 
 function TheAlcoholic.drankAlcohol(player)
@@ -151,10 +215,10 @@ function TheAlcoholic.drankAlcohol(player)
 
     player:getModData().LastDrinkTimestamp = getTimestampMs()
 
-    TheAlcoholic.OnInitModData()
+    --TheAlcoholic.OnInitModData()
 
-    print("Drank alcohol")
     player:getModData().AlcoholicHasDrank = true
+    player:getModData().AlcoholicDrinksPerDay = player:getModData().AlcoholicDrinksPerDay + 1
     player:getModData().AlcoholicTimeSinceLastDrink = 0
     player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold + 48
     
@@ -162,6 +226,7 @@ function TheAlcoholic.drankAlcohol(player)
     then
         player:getModData().AlcoholicThreshold = TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]+1
     end
+    player:getModData().AlcoholicPrevStress = 0
     player:getModData().AlcoholicStress = 0
     if player:HasTrait("Alcoholic")
     then
@@ -170,8 +235,7 @@ function TheAlcoholic.drankAlcohol(player)
 end
 
 function TheAlcoholic.noDrinkAlcohol(player)
-    TheAlcoholic.OnInitModData()
-    print("Did not drink alcohol this hour")
+    --TheAlcoholic.OnInitModData()
     player:getModData().AlcoholicTimeSinceLastDrink = player:getModData().AlcoholicTimeSinceLastDrink + 1
     if player:getModData().AlcoholicTimeSinceLastDrink > TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose]+1
     then
@@ -182,7 +246,7 @@ function TheAlcoholic.noDrinkAlcohol(player)
     then
         player:getModData().AlcoholicThreshold = 0
     end
-    player:getModData().AlcoholicStress = player:getModData().AlcoholicStress + 0.005
+    player:getModData().AlcoholicStress = player:getModData().AlcoholicStress + 0.02
     if player:getModData().AlcoholicStress > TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
     then
         player:getModData().AlcoholicStress = TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]

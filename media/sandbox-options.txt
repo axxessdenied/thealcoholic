@@ -36,6 +36,62 @@ option thealcoholic.tolerance {
     translation = thealcoholic_tolerance,
 }
 
+option thealcoholic.happiness {
+    type = boolean,
+    default = true,
+    page = thealcoholic,
+    translation = thealcoholic_happiness,
+}
+
+option thealcoholic.tolerance_build_max {
+    type = enum,
+    numValues = 3,
+    default = 1,
+    page = thealcoholic,
+    translation = thealcoholic_tolerance_build_max,
+    tooltip = thealcoholic_tolerance_build_max_tooltip,
+}
+
+option thealcoholic.base_tolerance {
+    type = enum,
+    numValues = 3,
+    default = 1,
+    page = thealcoholic,
+    translation = thealcoholic_base_tolerance,
+}
+
+option thealcoholic.tolerance_drinks_per_day {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_tolerance_drinks_per_day,
+}
+
+option thealcoholic.stress_per_drink {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = thealcoholic,
+    translation = thealcoholic_stress_per_drink,
+}
+
+option thealcoholic.happiness_per_drink {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = thealcoholic,
+    translation = thealcoholic_happiness_per_drink,
+}
+
+option thealcoholic.pain_per_drink {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = thealcoholic,
+    translation = thealcoholic_pain_per_drink,
+}
+
 option thealcoholic.withdrawal_phase1 {
     type = enum,
     numValues = 4,
