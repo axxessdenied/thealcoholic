@@ -287,10 +287,7 @@ function TheAlcoholic.OnDailyUpdate()
             then
                 if player:getModData().AlcoholicDrinksPerDay > TheAlcoholic.values.tolerance_drinks_per_day[TheAlcoholic.options.tolerance_drinks_per_day]
                 then
-                    if player:getModData().AlcoholicTolerance < TheAlcoholic.values.tolerance_build_max[TheAlcoholic.options.tolerance_build_max]
-                    then
-                        player:getModData().AlcoholicTolerance = player:getModData().AlcoholicTolerance + 0.01
-                    end
+                    player:getModData().AlcoholicTolerance = player:getModData().AlcoholicTolerance + 0.01
                 end
             end
             player:getModData().AlcoholicDrinksPerDay = 0
