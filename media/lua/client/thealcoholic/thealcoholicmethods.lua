@@ -180,7 +180,7 @@ end
 
 -- reduces how drunk 
 function TheAlcoholic.drunkResistance(player)
-    local resistance = TheAlcoholic.values.base_tolerance[TheAlcoholic.options.base_tolerance] + player:getModData().AlcoholicThreshold
+    local resistance = TheAlcoholic.values.base_tolerance[TheAlcoholic.options.base_tolerance] - player:getModData().AlcoholicTolerance
     if player:HasTrait("Alcoholic")
     then
         player:getStats():setDrunkenness(player:getStats():getDrunkenness() * resistance)
