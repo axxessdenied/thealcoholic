@@ -102,4 +102,6 @@ Sandbox_EN = {
     Sandbox_thealcoholic_maxstress_option2 = "Medium",
     Sandbox_thealcoholic_maxstress_option3 = "High",
     Sandbox_thealcoholic_maxstress_option4 = "Very High",
+    Sandbox_thealcoholic_debugmode = "*DEV*DEBUG MODE*DO NOT USE*,
+    Sandbox_thealcoholic_debugmode_tooltip = "*WARNING* *WARNING* THIS WILL BREAK YOUR GAME. DO NOT ENABLE. FOR DEBUGGING PURPOSES ONLY!",
 }

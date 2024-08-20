@@ -179,3 +179,11 @@ option thealcoholic.maxstress {
     page = thealcoholic,
     translation = thealcoholic_maxstress,
 }
+
+option thealcoholic.debugmode {
+    type = boolean,
+    default = false,
+    page = thealcoholic,
+    translation = thealcoholic_debugmode,
+    tooltip = thealcoholic_debugmode_tooltip,
+}

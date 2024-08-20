@@ -11,10 +11,10 @@ TheAlcoholic.values = {
     stress_per_drink = { 0.10, 0.15, 0.25, 0.50 },  --stress removed per drink
     happiness_per_drink = { 10, 15, 25, 50 },       --happiness per drink
     pain_per_drink = { 10, 15, 25, 50 },            --pain per drink
-    withdrawal_phase1 = {2,18,24,48},               --phase 1
-    withdrawal_phase2 = {6,48,72,96},               --phase 2
-    withdrawal_phase3 = {10,72,96,120},             --phase 3
-    withdrawal_phase4 = {16,96,120,144,168},        --phase 4
+    withdrawal_phase1 = {12,18,24,48},              --phase 1
+    withdrawal_phase2 = {24,48,72,96},               --phase 2
+    withdrawal_phase3 = {48,72,96,120},             --phase 3
+    withdrawal_phase4 = {72,96,120,144,168},        --phase 4
     daystolose = {504,672,1344,1920},               --sober values
     thresholdtogain = {200,400,800,1600},           --threshold values
     poison = {25,35,45,55},                         --poison values
@@ -49,6 +49,7 @@ function TheAlcoholic.OnInitModData()
         headachechance = getSandboxOptions():getOptionByName("thealcoholic.headachechance"):getValue(),
         withdrawal_chance = getSandboxOptions():getOptionByName("thealcoholic.withdrawalchance"):getValue(),
         maxstress = getSandboxOptions():getOptionByName("thealcoholic.maxstress"):getValue(),
+        debugmode = getSandboxOptions():getOptionByName("thealcoholic.debugmode"):getValue(),
     }
 end
 
