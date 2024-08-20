@@ -34,7 +34,7 @@ function TheAlcoholic.increaseStress(player, stress)
     local currentStress = player:getStats():getStress() - player:getStats():getStressFromCigarettes() 
     if currentStress + stress > 0.99
     then
-        player:getStats():setStress(0.99)
+        player:getStats():setStress(1)
     else
         player:getStats():setStress(currentStress + stress)
     end
@@ -116,47 +116,66 @@ function TheAlcoholic.increasePoison(player, poison, chance)
     then
         if player:HasTrait("WeakStomach")
         then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 1.25))
-        elseif player:HasTrait("WeakStomach") and player:HasTrait("ProneToIllness")
+            poison = poison * 1.25
+        end
+        if player:HasTrait("ProneToIllness")
         then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 1.5))
-        elseif player:HasTrait("WeakStomach") and player:HasTrait("Resilient")
+            poison = poison * 1.2
+        end
+        if player:HasTrait("Resilient")
         then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 1.1))
-        elseif player:HasTrait("ProneToIllness")
+            poison = poison * 0.8
+        end
+        if player:HasTrait("IronGut")
         then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 1.2))
-        elseif player:HasTrait("ProneToIllness") and player:HasTrait("IronGut")
+            poison = poison * 0.8
+        end
+
+        if currentFoodPoison + poison > 99
         then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 0.95))
-        elseif player:HasTrait("IronGut")
-        then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 0.7))
-        elseif player:HasTrait("IronGut") and player:HasTrait("Resilient")
-        then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 0.5))
-        elseif player:HasTrait("Resilient")
-        then
-            player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + (poison * 0.8))
+            player:getBodyDamage():setFoodSicknessLevel(100)
         else
             player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + poison)
-        end
-        if player:getBodyDamage():getFoodSicknessLevel() > 90 then
-            player:getBodyDamage():setFoodSicknessLevel(90)
         end
     end
 end
 
-function TheAlcoholic.increaseWithdrawalSicness(player, sickness, chance)
-    local currentWithdrawalSickness = player:getBodyDamage():getWithdrawalSicknessLevel()
+function TheAlcoholic.increaseWithdrawalSickness(player, sickness, chance)
     if chance == 0
     then
-        player:getModData().AlcoholicWithdrawalSickness = player:getModData().AlcoholicWithdrawalSickness + sickness
+        if player:HasTrait("WeakStomach")
+        then
+            sickness = sickness * 1.25
+        end
+        if player:HasTrait("ProneToIllness")
+        then
+            sickness = sickness * 1.25
+        end
+        if player:HasTrait("IronGut")
+        then
+            sickness = sickness * 0.8
+        end
+        if player:HasTrait("Resilient")
+        then
+            sickness = sickness * 0.8
+        end
+        if player:getModData().AlcoholicWithdrawalSickness < TheAlcoholic.values.max_withdrawal[player:getModData().AlcoholicWithdrawalPhase]
+        then
+            player:getModData().AlcoholicWithdrawalSickness = player:getModData().AlcoholicWithdrawalSickness + sickness
+        end
+        if player:getModData().AlcoholicPoisonDamageTotal + sickness > 100
+        then
+            player:getModData().AlcoholicPoisonDamageTotal = 100
+        else
+            player:getModData().AlcoholicPoisonDamageTotal = player:getModData().AlcoholicPoisonDamageTotal + sickness
+        end
     end
 end
 
 function TheAlcoholic.removeWithdrawalSickness(player)
     player:getModData().AlcoholicWithdrawalSickness = 0
+    player:getModData().AlcoholicWithrawalPhase = 0
+    player:getModData().AlcoholicHasWithdrawalSickness = false
     --stress
     local stress = player:getStats():getStress()
     player:getStats():setStress(stress * 0.5)
@@ -172,6 +191,9 @@ function TheAlcoholic.removeWithdrawalSickness(player)
         local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head")):getPain()
         player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head")):setAdditionalPain(head * 0.5)
     end
+    --food poisoning
+    local foodPoison = player:getBodyDamage():getFoodSicknessLevel()
+    player:getBodyDamage():setFoodSicknessLevel(foodPoison - player:getModData().AlcoholicPoisonDamageTotal * 0.5)
 end
 
 function TheAlcoholic.decreaseSanity(player, sanity, chance)
@@ -215,8 +237,6 @@ function TheAlcoholic.drankAlcohol(player)
 
     player:getModData().LastDrinkTimestamp = getTimestampMs()
 
-    --TheAlcoholic.OnInitModData()
-
     player:getModData().AlcoholicHasDrank = true
     player:getModData().AlcoholicDrinksPerDay = player:getModData().AlcoholicDrinksPerDay + 1
     player:getModData().AlcoholicTimeSinceLastDrink = 0
@@ -235,7 +255,6 @@ function TheAlcoholic.drankAlcohol(player)
 end
 
 function TheAlcoholic.noDrinkAlcohol(player)
-    --TheAlcoholic.OnInitModData()
     player:getModData().AlcoholicTimeSinceLastDrink = player:getModData().AlcoholicTimeSinceLastDrink + 1
     if player:getModData().AlcoholicTimeSinceLastDrink > TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose]+1
     then
@@ -246,9 +265,12 @@ function TheAlcoholic.noDrinkAlcohol(player)
     then
         player:getModData().AlcoholicThreshold = 0
     end
-    player:getModData().AlcoholicStress = player:getModData().AlcoholicStress + 0.02
-    if player:getModData().AlcoholicStress > TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
+    if player:HasTrait("Alcoholic")
     then
-        player:getModData().AlcoholicStress = TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
+        player:getModData().AlcoholicStress = player:getModData().AlcoholicStress + 0.02
+        if player:getModData().AlcoholicStress > TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
+        then
+            player:getModData().AlcoholicStress = TheAlcoholic.values.maxstress[TheAlcoholic.options.maxstress]
+        end
     end
 end

@@ -43,6 +43,13 @@ option thealcoholic.happiness {
     translation = thealcoholic_happiness,
 }
 
+option thealcoholic.poison {
+    type = boolean,
+    default = true,
+    page = thealcoholic,
+    translation = thealcoholic_poison,
+}
+
 option thealcoholic.tolerance_build_max {
     type = enum,
     numValues = 3,
@@ -170,6 +177,30 @@ option thealcoholic.withdrawalchance {
     default = 3,
     page = thealcoholic,
     translation = thealcoholic_withdrawalchance,
+}
+
+option thealcoholic.withdrawalrate {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawalrate,
+}
+
+option thealcoholic.withdrawaldeathchance {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawaldeathchance,
+}
+
+option thealcoholic.withdrawalpoisonchance {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = thealcoholic,
+    translation = thealcoholic_withdrawalpoisonchance,
 }
 
 option thealcoholic.maxstress {
