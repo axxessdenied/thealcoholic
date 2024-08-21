@@ -70,6 +70,10 @@ local function init2(player)
         then
             player:getModData().AlcoholicPoisonDamageTotal = 0
         end
+        if player:getModData().AlcoholicDrinksTotal == nil
+        then
+            player:getModData().AlcoholicDrinksTotal = 0
+        end
         player:getModData().AlcoholicInit2 = true
     end
 end
@@ -94,7 +98,7 @@ local function enableDebug()
     -- debugging values for the mod
     TheAlcoholic.values = {
         spawnitem = {"Nothing", "Base.BeerEmpty", "Base.BeerBottle", "Base.BeerCan", "Base.WhiskeyFull", "Base.Wine", "Base.Wine2", "Base.WineEmpty", "Base.WineEmpty2", "Base.WhiskeyEmpty"},
-        threshold_build_max = { 0.1, 0.15, 0.20 },      --threshold build max
+        tolerance_build_max = { 0.1, 0.15, 0.20 },      --tolerance build max
         base_tolerance = { 0.65, 0.60, 0.55 },          --base tolerance
         tolerance_drinks_per_day = { 8, 10, 12, 15 },   --tolerance drinks per day
         stress_per_drink = { 0.10, 0.15, 0.25, 0.50 },  --stress removed per drink
@@ -102,18 +106,18 @@ local function enableDebug()
         pain_per_drink = { 10, 15, 25, 50 },            --pain per drink
         withdrawal_phase1 = {1,18,24,48},               --phase 1
         withdrawal_phase2 = {4,48,72,96},               --phase 2
-        withdrawal_phase3 = {8,72,96,120},             --phase 3
+        withdrawal_phase3 = {8,72,96,120},              --phase 3
         withdrawal_phase4 = {12,96,120,144,168},        --phase 4
         daystolose = {24,672,1344,1920},                --sober values
         thresholdtogain = {200,400,800,1600},           --threshold values
-        poisondmg = {25,35,45,55},                         --poison values
+        poisondmg = {25,35,45,55},                      --poison values
         headachedmg = {30,50,65,80},                    --headache values
         headachechance = {10,7,5,3},                    --headache chance
         withdrawal_chance = {10,7,5,2},                 --withdrawal sickness chance
-        withdrawal_rate = {0.1,0.002,0.003,0.004},    --withdrawal sickness rate
+        withdrawal_rate = {0.1,0.002,0.003,0.004},      --withdrawal sickness rate
         max_withdrawal = {0.3,0.5,0.7,1.0},             --max withdrawal
         withdrawal_deathchance = {4,50,25,10},          --withdrawal death chance
-        withdrawal_poisonchance = {2,20,10,4},         --withdrawal poison chance
+        withdrawal_poisonchance = {2,20,10,4},          --withdrawal poison chance
         maxstress = {0.3,0.5,0.7,0.9},                  --max alcoholic stress
     }
 end
@@ -179,7 +183,7 @@ function TheAlcoholic.onTraitUpdate()
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 1
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase2"), true, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase2"), false, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 2
                     player:getModData().AlcoholicHasWithdrawalSickness = true
@@ -195,7 +199,7 @@ function TheAlcoholic.onTraitUpdate()
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 2
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase3"), true, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase3"), false, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 3
                     player:getModData().AlcoholicHasWithdrawalSickness = true
@@ -212,7 +216,7 @@ function TheAlcoholic.onTraitUpdate()
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 3
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase4"), true, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase4"), false, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 4
                     player:getModData().AlcoholicHasWithdrawalSickness = true
@@ -227,11 +231,11 @@ function TheAlcoholic.onTraitUpdate()
                 elseif timeSinceDrink > TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose] and TheAlcoholic.options.dynamic == true
                 then
                     player:getTraits():remove("Alcoholic")
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicLost"), true, HaloTextHelper.getColorGreen())
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicLost"), false, HaloTextHelper.getColorGreen())
                 end
                 
                 -- debug
-                if isDebugEnabled()
+                if TheAlcoholic.options.debugmode == true
                 then
                     print("----------The Alcoholic: Trait update----------")
                     print("Hours since last drink:"..timeSinceDrink)

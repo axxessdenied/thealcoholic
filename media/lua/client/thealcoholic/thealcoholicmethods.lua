@@ -240,6 +240,7 @@ function TheAlcoholic.drankAlcohol(player)
     player:getModData().AlcoholicHasDrank = true
     player:getModData().AlcoholicDrinksPerDay = player:getModData().AlcoholicDrinksPerDay + 1
     player:getModData().AlcoholicTimeSinceLastDrink = 0
+    player:getModData().AlcoholicDrinksTotal = player:getModData().AlcoholicDrinksTotal + 1
     player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold + 4
 
     if player:getModData().AlcoholicThreshold > TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]+1
