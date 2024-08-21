@@ -164,12 +164,6 @@ function TheAlcoholic.increaseWithdrawalSickness(player, sickness, chance)
         then
             player:getModData().AlcoholicWithdrawalSickness = player:getModData().AlcoholicWithdrawalSickness + sickness
         end
-        if player:getModData().AlcoholicPoisonDamageTotal + sickness > 100
-        then
-            player:getModData().AlcoholicPoisonDamageTotal = 100
-        else
-            player:getModData().AlcoholicPoisonDamageTotal = player:getModData().AlcoholicPoisonDamageTotal + sickness
-        end
     end
 end
 
