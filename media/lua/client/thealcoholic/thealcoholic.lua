@@ -106,7 +106,7 @@ local function enableDebug()
         withdrawal_phase4 = {12,96,120,144,168},        --phase 4
         daystolose = {24,672,1344,1920},                --sober values
         thresholdtogain = {200,400,800,1600},           --threshold values
-        poison = {25,35,45,55},                         --poison values
+        poisondmg = {25,35,45,55},                         --poison values
         headachedmg = {30,50,65,80},                    --headache values
         headachechance = {10,7,5,3},                    --headache chance
         withdrawal_chance = {10,7,5,2},                 --withdrawal sickness chance
@@ -335,16 +335,14 @@ function TheAlcoholic.onWithdrawalSickness()
                     if TheAlcoholic.options.poison == true
                     then
                         local chance = ZombRand(TheAlcoholic.values.withdrawal_poisonchance[TheAlcoholic.options.withdrawal_poisonchance])
-                        local poisondmg = 25
-                        print("Poison damage: "..poisondmg)
-                        print("The Alcoholic: Poison chance: "..math.floor(chance))
-                        TheAlcoholic.increasePoison(player, poisondmg, 0)
+                        local poisondmg = ZombRand(TheAlcoholic.values.poisondmg[TheAlcoholic.options.poisondmg])
+                        TheAlcoholic.increasePoison(player, poisondmg, chance)
                     end
                 end
                 if player:getModData().AlcoholicWithdrawalSickness > 0.90
                 then
                     local chance = ZombRand(TheAlcoholic.values.withdrawal_deathchance[TheAlcoholic.options.withdrawal_deathchance])
-                    if math.floor(chance) == 0
+                    if chance == 0
                     then
                         player:die()
                     end

@@ -131,11 +131,12 @@ function TheAlcoholic.increasePoison(player, poison, chance)
             poison = poison * 0.8
         end
 
-        if currentFoodPoison + poison > 99
+        if currentFoodPoison + poison > 95
         then
-            player:getBodyDamage():setFoodSicknessLevel(100)
+            player:getBodyDamage():setFoodSicknessLevel(95)
         else
             player:getBodyDamage():setFoodSicknessLevel(currentFoodPoison + poison)
+            player:getModData().AlcoholicPoisonDamageTotal = player:getModData().AlcoholicPoisonDamageTotal + poison
         end
     end
 end
@@ -234,14 +235,13 @@ function TheAlcoholic.drankAlcohol(player)
     then
         return
     end
-
     player:getModData().LastDrinkTimestamp = getTimestampMs()
 
     player:getModData().AlcoholicHasDrank = true
     player:getModData().AlcoholicDrinksPerDay = player:getModData().AlcoholicDrinksPerDay + 1
     player:getModData().AlcoholicTimeSinceLastDrink = 0
-    player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold + 48
-    
+    player:getModData().AlcoholicThreshold = player:getModData().AlcoholicThreshold + 4
+
     if player:getModData().AlcoholicThreshold > TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]+1
     then
         player:getModData().AlcoholicThreshold = TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]+1
