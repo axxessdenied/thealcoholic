@@ -172,7 +172,7 @@ function TheAlcoholic.removeWithdrawalSickness(player)
     player:getModData().AlcoholicWithrawalPhase = 0
     player:getModData().AlcoholicHasWithdrawalSickness = false
     --stress
-    local stress = player:getStats():getStress()
+    local stress = player:getStats():getStress() - player:getStats():getStressFromCigarettes()
     player:getStats():setStress(stress * 0.5)
     --happiness
     local happiness = player:getBodyDamage():getUnhappynessLevel()
