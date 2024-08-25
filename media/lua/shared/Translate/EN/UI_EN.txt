@@ -2,8 +2,8 @@ UI_EN = {
     UI_trait_Alcoholic = "Alcoholic",
     UI_trait_AlcoholicDesc = "You love to get sauced. You NEED to get sauced.",
     UI_trait_AlcoholicLost = "Lost Alcoholic",
-    UI_trait_AlcoholicWithdrawal_phase1 = "Alcohol withdrawal symptoms have begun",
-    UI_trait_AlcoholicWithdrawal_phase2 = "Alcohol withdrawal symptoms worsen",
-    UI_trait_AlcoholicWithdrawal_phase3 = "Alcohol withdrawal symptoms become severe",
-    UI_trait_AlcoholicWithdrawal_phase4 = "Alcohol withdrawal symptoms become deadly!",
+    UI_trait_Alcoholic_Withdrawal_phase1 = "Alcohol withdrawal symptoms have begun",
+    UI_trait_Alcoholic_Withdrawal_phase2 = "Alcohol withdrawal symptoms worsen",
+    UI_trait_Alcoholic_Withdrawal_phase3 = "Alcohol withdrawal symptoms become severe",
+    UI_trait_Alcoholic_Withdrawal_phase4 = "Alcohol withdrawal symptoms become deadly!",
 }

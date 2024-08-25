@@ -87,44 +87,15 @@ function TheAlcoholic.onCreatePlayer(playernum, character)
 
     if player:HasTrait("Alcoholic")
     then
-        if TheAlcoholic.options.spawnitem > 1 -- 1 is nothing
+        if TheAlcoholic.sBVars.SpawnItem > 1 or TheAlcoholic.values.UseSpawnItemCustom -- 1 is nothing
         then
-            player:getInventory():AddItem(TheAlcoholic.values.spawnitem[TheAlcoholic.options.spawnitem])
+            player:getInventory():AddItem(TheAlcoholic.values.SpawnItem)
         end
     end
 end
 
-local function enableDebug()
-    -- debugging values for the mod
-    TheAlcoholic.values = {
-        spawnitem = {"Nothing", "Base.BeerEmpty", "Base.BeerBottle", "Base.BeerCan", "Base.WhiskeyFull", "Base.Wine", "Base.Wine2", "Base.WineEmpty", "Base.WineEmpty2", "Base.WhiskeyEmpty"},
-        tolerance_build_max = { 0.1, 0.15, 0.20 },      --tolerance build max
-        base_tolerance = { 0.65, 0.60, 0.55 },          --base tolerance
-        tolerance_drinks_per_day = { 8, 10, 12, 15 },   --tolerance drinks per day
-        stress_per_drink = { 0.10, 0.15, 0.25, 0.50 },  --stress removed per drink
-        happiness_per_drink = { 10, 15, 25, 50 },       --happiness per drink
-        pain_per_drink = { 10, 15, 25, 50 },            --pain per drink
-        withdrawal_phase1 = {1,18,24,48},               --phase 1
-        withdrawal_phase2 = {4,48,72,96},               --phase 2
-        withdrawal_phase3 = {8,72,96,120},              --phase 3
-        withdrawal_phase4 = {12,96,120,144,168},        --phase 4
-        daystolose = {24,672,1344,1920},                --sober values
-        thresholdtogain = {200,400,800,1600},           --threshold values
-        poisondmg = {25,35,45,55},                      --poison values
-        headachedmg = {30,50,65,80},                    --headache values
-        headachechance = {10,7,5,3},                    --headache chance
-        withdrawal_chance = {10,7,5,2},                 --withdrawal sickness chance
-        withdrawal_rate = {0.1,0.002,0.003,0.004},      --withdrawal sickness rate
-        max_withdrawal = {0.3,0.5,0.7,1.0},             --max withdrawal
-        withdrawal_deathchance = {4,50,25,10},          --withdrawal death chance
-        withdrawal_poisonchance = {2,20,10,4},          --withdrawal poison chance
-        maxstress = {0.3,0.5,0.7,0.9},                  --max alcoholic stress
-    }
-end
-
-
 -- update event to support the mod being added to an existing game
-function TheAlcoholic.onBoot() 
+function TheAlcoholic.onBoot()
     for i=0, getNumActivePlayers()-1 do
         local player = getSpecificPlayer(i)
         if player
@@ -140,15 +111,9 @@ function TheAlcoholic.onBoot()
     end
 end
 
-function TheAlcoholic.onStart()
-    if TheAlcoholic.options.debugmode == true
-    then
-        enableDebug()
-    end
-end
-
 -- update event to handle the alcoholic trait
 function TheAlcoholic.onTraitUpdate()
+    local values = TheAlcoholic.values
     for i=0, getNumActivePlayers()-1 do
         local player = getSpecificPlayer(i)
         if player and player:isAlive()
@@ -164,11 +129,11 @@ function TheAlcoholic.onTraitUpdate()
 
                 local timeSinceDrink = player:getModData().AlcoholicTimeSinceLastDrink
                 
-                if timeSinceDrink > TheAlcoholic.values.withdrawal_phase1[TheAlcoholic.options.withdrawal_phase1] and timeSinceDrink <= TheAlcoholic.values.withdrawal_phase2[TheAlcoholic.options.withdrawal_phase2]
+                if timeSinceDrink > values.WithdrawalPhase1 and timeSinceDrink <= values.WithdrawalPhase2
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 0
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase1"), true, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic_WithdrawalPhase1"), true, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 1
                     player:getModData().AlcoholicHasWithdrawalSickness = true
@@ -179,27 +144,27 @@ function TheAlcoholic.onTraitUpdate()
                     then
                         player:getModData().AlcoholicTolerance = player:getModData().AlcoholicTolerance - 0.01
                     end
-                elseif timeSinceDrink > TheAlcoholic.values.withdrawal_phase2[TheAlcoholic.options.withdrawal_phase2] and timeSinceDrink <= TheAlcoholic.values.withdrawal_phase3[TheAlcoholic.options.withdrawal_phase3]
+                elseif timeSinceDrink > values.WithdrawalPhase2 and timeSinceDrink <= values.WithdrawalPhase3
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 1
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase2"), false, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic_WithdrawalPhase2"), false, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 2
                     player:getModData().AlcoholicHasWithdrawalSickness = true
                     TheAlcoholic.increaseStress(player, 0.15)
                     TheAlcoholic.increaseFatigue(player, 0.05, ZombRand(4))
                     TheAlcoholic.decreaseHappiness(player, 6)
-                    if TheAlcoholic.options.headaches == true
+                    if values.Headaches == true
                     then
-                        TheAlcoholic.increasePain(player, "Head", ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]), ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]))
+                        TheAlcoholic.increasePain(player, "Head", ZombRand(values.HeadacheDamage), ZombRand(values.HeadacheDamage))
                     end
                     player:getModData().AlcholicTolerance = 0
-                elseif timeSinceDrink > TheAlcoholic.values.withdrawal_phase3[TheAlcoholic.options.withdrawal_phase3] and timeSinceDrink <= TheAlcoholic.values.withdrawal_phase4[TheAlcoholic.options.withdrawal_phase4]
+                elseif timeSinceDrink > values.WithdrawalPhase3 and timeSinceDrink <= values.WithdrawalPhase4
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 2
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase3"), false, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic_WithdrawalPhase3"), false, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 3
                     player:getModData().AlcoholicHasWithdrawalSickness = true
@@ -207,35 +172,35 @@ function TheAlcoholic.onTraitUpdate()
                     TheAlcoholic.increaseStress(player, 0.25)
                     TheAlcoholic.increaseFatigue(player, 0.05, ZombRand(3))
                     TheAlcoholic.decreaseHappiness(player, 7)
-                    if TheAlcoholic.options.headaches == true
+                    if values.Headaches == true
                     then
-                        TheAlcoholic.increasePain(player, "Head", ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]+10), ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]-1))
+                        TheAlcoholic.increasePain(player, "Head", ZombRand(values.HeadacheDamage+10), ZombRand(values.HeadacheDamage-1))
                     end
                     player:getModData().AlcholicTolerance = 0
-                elseif timeSinceDrink > TheAlcoholic.values.withdrawal_phase4[TheAlcoholic.options.withdrawal_phase4] and timeSinceDrink <= TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose]
+                elseif timeSinceDrink > values.WithdrawalPhase4 and timeSinceDrink <= values.DaysToLose
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 3
                     then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicWithdrawal_phase4"), false, HaloTextHelper.getColorRed())
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic_WithdrawalPhase4"), false, HaloTextHelper.getColorRed())
                     end
                     player:getModData().AlcoholicWithdrawalPhase = 4
                     player:getModData().AlcoholicHasWithdrawalSickness = true
                     TheAlcoholic.increaseStress(player, 0.3)
                     TheAlcoholic.increaseFatigue(player, 0.1, ZombRand(2))
                     TheAlcoholic.decreaseHappiness(player, 10)
-                    if TheAlcoholic.options.headaches == true
+                    if values.Headaches == true
                     then
-                        TheAlcoholic.increasePain(player, "Head", ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]+15), ZombRand(TheAlcoholic.values.headachedmg[TheAlcoholic.options.headachedmg]-2))
+                        TheAlcoholic.increasePain(player, "Head", ZombRand(values.HeadacheDamage+15), ZombRand(values.HeadacheDamage-2))
                     end
                     player:getModData().AlcholicTolerance = 0
-                elseif timeSinceDrink > TheAlcoholic.values.daystolose[TheAlcoholic.options.daystolose] and TheAlcoholic.options.dynamic == true
+                elseif timeSinceDrink > values.DaysToLose and values.Dynamic == true
                 then
                     player:getTraits():remove("Alcoholic")
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicLost"), false, HaloTextHelper.getColorGreen())
                 end
                 
                 -- debug
-                if TheAlcoholic.options.debugmode == true
+                if values.DebugMode == true
                 then
                     print("----------The Alcoholic: Trait update----------")
                     print("Hours since last drink:"..timeSinceDrink)
@@ -257,7 +222,7 @@ function TheAlcoholic.onTraitUpdate()
                 end
                 -- end debug
             else
-                if player:getModData().AlcoholicThreshold > TheAlcoholic.values.thresholdtogain[TheAlcoholic.options.thresholdtogain]  and TheAlcoholic.options.dynamic == true
+                if player:getModData().AlcoholicThreshold > values.ThresholdToGain  and values.Dynamic == true
                 then
                     player:getTraits():add("Alcoholic")
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic"), true, HaloTextHelper.getColorRed())
@@ -290,7 +255,8 @@ function TheAlcoholic.onStressCheck()
 end
 
 function TheAlcoholic.onDailyUpdate()
-    if isDebugEnabled()
+    local values = TheAlcoholic.values
+    if TheAlcoholic.values.DebugMode == true
     then
         print("The Alcoholic: Daily update")
     end
@@ -298,17 +264,17 @@ function TheAlcoholic.onDailyUpdate()
         local player = getSpecificPlayer(i)
         if player and player:isAlive()
         then
-            if isDebugEnabled()
+            if TheAlcoholic.values.DebugMode == true
             then
                 print(player:getUsername().." drank "..player:getModData().AlcoholicDrinksPerDay.." drinks today")
             end
             if player:HasTrait("Alcoholic")
             then
-                if TheAlcoholic.options.tolerance == true
+                if values.Tolerance == true
                 then
-                    if player:getModData().AlcoholicDrinksPerDay >= TheAlcoholic.values.tolerance_drinks_per_day[TheAlcoholic.options.tolerance_drinks_per_day]
+                    if player:getModData().AlcoholicDrinksPerDay >= values.ToleranceDrinksPerDay
                     then
-                        if player:getModData().AlcoholicTolerance < TheAlcoholic.values.tolerance_build_max[TheAlcoholic.options.tolerance_build_max]
+                        if player:getModData().AlcoholicTolerance < values.ToleranceBuildMax
                         then
                             player:getModData().AlcoholicTolerance = player:getModData().AlcoholicTolerance + 0.01
                         end
@@ -321,7 +287,8 @@ function TheAlcoholic.onDailyUpdate()
 end
 
 function TheAlcoholic.onWithdrawalSickness()
-    if TheAlcoholic.options.withdrawal == true
+    local values = TheAlcoholic.values
+    if values.Withdrawal == true
     then
         for i=0, getNumActivePlayers()-1 do
             local player = getSpecificPlayer(i)
@@ -331,21 +298,21 @@ function TheAlcoholic.onWithdrawalSickness()
                 then
                     if player:getModData().AlcoholicHasWithdrawalSickness == true
                     then
-                        TheAlcoholic.increaseWithdrawalSickness(player, TheAlcoholic.values.withdrawal_rate[TheAlcoholic.options.withdrawal_rate], ZombRand(5 - player:getModData().AlcoholicWithdrawalPhase))
+                        TheAlcoholic.increaseWithdrawalSickness(player, values.WithdrawalRate, ZombRand(5 - player:getModData().AlcoholicWithdrawalPhase))
                     end
                 end
                 if player:getModData().AlcoholicWithdrawalSickness > 0.6
                 then
-                    if TheAlcoholic.options.poison == true
+                    if values.Poison == true
                     then
-                        local chance = ZombRand(TheAlcoholic.values.withdrawal_poisonchance[TheAlcoholic.options.withdrawal_poisonchance])
-                        local poisondmg = ZombRand(TheAlcoholic.values.poisondmg[TheAlcoholic.options.poisondmg])
+                        local chance = ZombRand(values.WithdrawalPoisonChance)
+                        local poisondmg = ZombRand(values.PoisonDamage)
                         TheAlcoholic.increasePoison(player, poisondmg, chance)
                     end
                 end
                 if player:getModData().AlcoholicWithdrawalSickness > 0.90
                 then
-                    local chance = ZombRand(TheAlcoholic.values.withdrawal_deathchance[TheAlcoholic.options.withdrawal_deathchance])
+                    local chance = ZombRand(values.WithdrawalDeathChance)
                     if chance == 0
                     then
                         player:die()
@@ -360,8 +327,7 @@ end
 
 Events.OnCreatePlayer.Add(TheAlcoholic.onCreatePlayer)
 Events.OnGameBoot.Add(TheAlcoholic.onBoot)
-Events.OnGameStart.Add(TheAlcoholic.onStart)
-Events.EveryTenMinutes.Add(TheAlcoholic.onStressCheck)
+Events.OnTick.Add(TheAlcoholic.onStressCheck)
 Events.EveryTenMinutes.Add(TheAlcoholic.onWithdrawalSickness)
 Events.EveryHours.Add(TheAlcoholic.onTraitUpdate)
 Events.EveryDays.Add(TheAlcoholic.onDailyUpdate)

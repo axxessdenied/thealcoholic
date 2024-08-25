@@ -1,220 +1,643 @@
 VERSION = 1,
 
-option thealcoholic.spawnitem = {
+option TheAlcoholic.SpawnItem = {
     type = enum,
     default = 2,
     numValues = 10,
-    page = thealcoholic,
-    translation = thealcoholic_spawnitem,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_SpawnItem,
 }
 
-option thealcoholic.headaches {
+option TheAlcoholic.Headaches {
     type = boolean,
     default = true,
-    page = thealcoholic,
-    translation = thealcoholic_headaches,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_Headaches,
 }
 
-option thealcoholic.withdrawal {
+option TheAlcoholic.Withdrawal {
     type = boolean,
     default = true,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawal,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_Withdrawal,
 }
 
-option thealcoholic.dynamic {
+option TheAlcoholic.Dynamic {
     type = boolean,
     default = true,
-    page = thealcoholic,
-    translation = thealcoholic_dynamic,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_Dynamic,
 }
 
-option thealcoholic.tolerance {
-    type = boolean,
-    default = false,
-    page = thealcoholic,
-    translation = thealcoholic_tolerance,
-}
-
-option thealcoholic.happiness {
+option TheAlcoholic.Tolerance {
     type = boolean,
     default = true,
-    page = thealcoholic,
-    translation = thealcoholic_happiness,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_Tolerance,
 }
 
-option thealcoholic.poison {
+option TheAlcoholic.Happiness {
     type = boolean,
     default = true,
-    page = thealcoholic,
-    translation = thealcoholic_poison,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_Happiness,
 }
 
-option thealcoholic.tolerance_build_max {
+option TheAlcoholic.Poison {
+    type = boolean,
+    default = true,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_Poison,
+}
+
+option TheAlcoholic.ToleranceBuildMax {
     type = enum,
     numValues = 3,
     default = 1,
-    page = thealcoholic,
-    translation = thealcoholic_tolerance_build_max,
-    tooltip = thealcoholic_tolerance_build_max_tooltip,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_ToleranceBuildMax,
+    tooltip = TheAlcoholic_ToleranceBuildMax_tooltip,
 }
 
-option thealcoholic.base_tolerance {
+option TheAlcoholic.BaseTolerance {
     type = enum,
     numValues = 3,
     default = 1,
-    page = thealcoholic,
-    translation = thealcoholic_base_tolerance,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_BaseTolerance,
 }
 
-option thealcoholic.tolerance_drinks_per_day {
+option TheAlcoholic.ToleranceDrinksPerDay {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_tolerance_drinks_per_day,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_ToleranceDrinksPerDay,
 }
 
-option thealcoholic.stress_per_drink {
+option TheAlcoholic.StressPerDrink {
     type = enum,
     numValues = 4,
     default = 3,
-    page = thealcoholic,
-    translation = thealcoholic_stress_per_drink,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_StressPerDrink,
 }
 
-option thealcoholic.happiness_per_drink {
+option TheAlcoholic.HappinessPerDrink {
     type = enum,
     numValues = 4,
     default = 3,
-    page = thealcoholic,
-    translation = thealcoholic_happiness_per_drink,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HappinessPerDrink,
 }
 
-option thealcoholic.pain_per_drink {
+option TheAlcoholic.PainPerDrink {
     type = enum,
     numValues = 4,
     default = 3,
-    page = thealcoholic,
-    translation = thealcoholic_pain_per_drink,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_PainPerDrink,
 }
 
-option thealcoholic.withdrawal_phase1 {
+option TheAlcoholic.WithdrawalPhase1 {
     type = enum,
     numValues = 4,
     default = 3,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawal_phase1,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase1,
 }
 
-option thealcoholic.withdrawal_phase2 {
+option TheAlcoholic.WithdrawalPhase2 {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawal_phase2,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase2,
 }
 
-option thealcoholic.withdrawal_phase3 {
+option TheAlcoholic.WithdrawalPhase3 {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawal_phase3,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase3,
 }
 
-option thealcoholic.withdrawal_phase4 {
+option TheAlcoholic.WithdrawalPhase4 {
     type = enum,
     numValues = 5,
     default = 4,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawal_phase4,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase4,
 }
 
-option thealcoholic.daystolose {
+option TheAlcoholic.DaysToLose {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_daystolose,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_DaysToLose,
 }
 
-option thealcoholic.thresholdtogain {
+option TheAlcoholic.ThresholdToGain {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_thresholdtogain,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_ThresholdToGain,
 }
 
-option thealcoholic.poisondamage {
+option TheAlcoholic.PoisonDamage {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_poisondamage,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_PoisonDamage,
 }
 
-option thealcoholic.headachedamage {
+option TheAlcoholic.HeadacheDamage {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_headachedamage,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HeadacheDamage,
 }
 
-option thealcoholic.headachechance {
+option TheAlcoholic.HeadacheChance {
     type = enum,
     numValues = 4,
     default = 3,
-    page = thealcoholic,
-    translation = thealcoholic_headachechance,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HeadacheChance,
 }
 
-option thealcoholic.withdrawalchance {
+option TheAlcoholic.WithdrawalChance {
     type = enum,
     numValues = 4,
     default = 3,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawalchance,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalChance,
 }
 
-option thealcoholic.withdrawalrate {
+option TheAlcoholic.WithdrawalRate {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawalrate,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalRate,
 }
 
-option thealcoholic.withdrawaldeathchance {
+option TheAlcoholic.WithdrawalDeathChance {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawaldeathchance,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalDeathChance,
 }
 
-option thealcoholic.withdrawalpoisonchance {
+option TheAlcoholic.WithdrawalPoisonChance {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_withdrawalpoisonchance,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPoisonChance,
 }
 
-option thealcoholic.maxstress {
+option TheAlcoholic.MaxStress {
     type = enum,
     numValues = 4,
     default = 2,
-    page = thealcoholic,
-    translation = thealcoholic_maxstress,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_MaxStress,
 }
 
-option thealcoholic.debugmode {
+option TheAlcoholic.DebugMode {
     type = boolean,
     default = false,
-    page = thealcoholic,
-    translation = thealcoholic_debugmode,
-    tooltip = thealcoholic_debugmode_tooltip,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_DebugMode,
+    tooltip = TheAlcoholic_DebugMode_tooltip,
+}
+
+option TheAlcoholic.UseSpawnItemCustom = {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseSpawnItemCustom,
+}
+
+option TheAlcoholic.SpawnItemCustom = {
+    type = string,
+    default = Base.WhiskeyFull,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_SpawnItemCustom,
+    tooltip = TheAlcoholic_SpawnItemCustom_tooltip,
+}
+
+option TheAlcoholic.UseToleranceBuildMaxCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseToleranceBuildMaxCustom,
+}
+
+option TheAlcoholic.ToleranceBuildMaxCustom {
+    type = integer,
+    default = 10,
+    min = 1,
+    max = 50,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_ToleranceBuildMaxCustom,
+    tooltip = TheAlcoholic_ToleranceBuildMaxCustom_tooltip,
+}
+
+option TheAlcoholic.UseBaseToleranceCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseBaseToleranceCustom,
+}
+
+option TheAlcoholic.BaseToleranceCustom {
+    type = integer,
+    default = 35,
+    min = 1,
+    max = 50,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_BaseToleranceCustom,
+    tooltip = TheAlcoholic_BaseToleranceCustom_tooltip,
+}
+
+option TheAlcoholic.UseToleranceDrinksPerDayCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseToleranceDrinksPerDayCustom,
+}
+
+option TheAlcoholic.ToleranceDrinksPerDayCustom {
+    type = integer,
+    default = 10,
+    min = 1,
+    max = 50,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_ToleranceDrinksPerDayCustom,
+    tooltip = TheAlcoholic_ToleranceDrinksPerDayCustom_tooltip,
+}
+
+option TheAlcoholic.UseStressPerDrinkCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseStressPerDrinkCustom,
+}
+
+option TheAlcoholic.StressPerDrinkCustom {
+    type = integer,
+    default = 10,
+    min = 1,
+    max = 50,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_StressPerDrinkCustom,
+    tooltip = TheAlcoholic_StressPerDrinkCustom_tooltip,
+}
+
+option TheAlcoholic.UseHappinessPerDrinkCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseHappinessPerDrinkCustom,
+}
+
+option TheAlcoholic.HappinessPerDrinkCustom {
+    type = integer,
+    default = 25,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HappinessPerDrinkCustom,
+    tooltip = TheAlcoholic_HappinessPerDrinkCustom_tooltip,
+}
+
+option TheAlcoholic.UsePainPerDrinkCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UsePainPerDrinkCustom,
+}
+
+option TheAlcoholic.PainPerDrinkCustom {
+    type = integer,
+    default = 25,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_PainPerDrinkCustom,
+    tooltip = TheAlcoholic_PainPerDrinkCustom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalPhase1Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalPhase1Custom,
+}
+
+option TheAlcoholic.WithdrawalPhase1Custom {
+    type = integer,
+    default = 24,
+    min = 1,
+    max = 500,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase1Custom,
+    tooltip = TheAlcoholic_WithdrawalPhase1Custom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalPhase2Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalPhase2Custom,
+}
+
+option TheAlcoholic.WithdrawalPhase2Custom {
+    type = integer,
+    default = 72,
+    min = 1,
+    max = 1000,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase2Custom,
+    tooltip = TheAlcoholic_WithdrawalPhase2Custom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalPhase3Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalPhase3Custom,
+}
+
+option TheAlcoholic.WithdrawalPhase3Custom {
+    type = integer,
+    default = 96,
+    min = 1,
+    max = 2000,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase3Custom,
+    tooltip = TheAlcoholic_WithdrawalPhase3Custom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalPhase4Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalPhase4Custom,
+}
+
+option TheAlcoholic.WithdrawalPhase4Custom {
+    type = integer,
+    default = 120,
+    min = 1,
+    max = 4000,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPhase4Custom,
+    tooltip = TheAlcoholic_WithdrawalPhase4Custom_tooltip,
+}
+
+option TheAlcoholic.UseDaysToLoseCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseDaysToLoseCustom,
+}
+
+option TheAlcoholic.DaysToLoseCustom {
+    type = integer,
+    default = 28,
+    min = 1,
+    max = 365,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_DaysToLoseCustom,
+    tooltip = TheAlcoholic_DaysToLoseCustom_tooltip,
+}
+
+option TheAlcoholic.UseThresholdToGainCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseThresholdToGainCustom,
+}
+
+option TheAlcoholic.ThresholdToGainCustom {
+    type = integer,
+    default = 400,
+    min = 100,
+    max = 5000,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_ThresholdToGainCustom,
+    tooltip = TheAlcoholic_ThresholdToGainCustom_tooltip,
+}
+
+option TheAlcoholic.UsePoisonDamageCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UsePoisonDamageCustom,
+}
+
+option TheAlcoholic.PoisonDamageCustom {
+    type = integer,
+    default = 25,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_PoisonDamageCustom,
+    tooltip = TheAlcoholic_PoisonDamageCustom_tooltip,
+}
+
+option TheAlcoholic.UseHeadacheDamageCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseHeadacheDamageCustom,
+}
+
+option TheAlcoholic.HeadacheDamageCustom {
+    type = integer,
+    default = 50,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HeadacheDamageCustom,
+    tooltip = TheAlcoholic_HeadacheDamageCustom_tooltip,
+}
+
+option TheAlcoholic.UseHeadacheChanceCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseHeadacheChanceCustom,
+}
+
+option TheAlcoholic.HeadacheChanceCustom {
+    type = integer,
+    default = 5,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HeadacheChanceCustom,
+    tooltip = TheAlcoholic_HeadacheChanceCustom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalChanceCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalChanceCustom,
+}
+
+option TheAlcoholic.WithdrawalChanceCustom {
+    type = integer,
+    default = 5,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalChanceCustom,
+    tooltip = TheAlcoholic_WithdrawalChanceCustom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalRateCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalRateCustom,
+}
+
+option TheAlcoholic.WithdrawalRateCustom {
+    type = double,
+    default = 0.002,
+    min = 0.0001,
+    max = 0.1,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalRateCustom,
+    tooltip = TheAlcoholic_WithdrawalRateCustom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalPoisonChanceCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalPoisonChanceCustom,
+}
+
+option TheAlcoholic.WithdrawalPoisonChanceCustom {
+    type = integer,
+    default = 20,
+    min = 1,
+    max = 500,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalPoisonChanceCustom,
+    tooltip = TheAlcoholic_WithdrawalPoisonChanceCustom_tooltip,
+}
+
+option TheAlcoholic.UseWithdrawalDeathChanceCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseWithdrawalDeathChanceCustom,
+}
+
+option TheAlcoholic.WithdrawalDeathChanceCustom {
+    type = integer,
+    default = 50,
+    min = 1,
+    max = 500,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_WithdrawalDeathChanceCustom,
+    tooltip = TheAlcoholic_WithdrawalDeathChanceCustom_tooltip,
+}
+
+option TheAlcoholic.UseMaxStressCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseMaxStressCustom,
+}
+
+option TheAlcoholic.MaxStressCustom {
+    type = integer,
+    default = 50,
+    min = 1,
+    max = 100,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_MaxStressCustom,
+    tooltip = TheAlcoholic_MaxStressCustom_tooltip,
+}
+
+option TheAlcoholic.UseMaxWithdrawalPhase1Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseMaxWithdrawalPhase1Custom,
+}
+
+option TheAlcoholic.MaxWithdrawalPhase1Custom {
+    type = double,
+    default = 0.3,
+    min = 0.01,
+    max = 1.0,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_MaxWithdrawalPhase1Custom,
+    tooltip = TheAlcoholic_MaxWithdrawalPhase1Custom_tooltip,
+}
+
+option TheAlcoholic.UseMaxWithdrawalPhase2Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseMaxWithdrawalPhase2Custom,
+}
+
+option TheAlcoholic.MaxWithdrawalPhase2Custom {
+    type = double,
+    default = 0.5,
+    min = 0.01,
+    max = 1.0,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_MaxWithdrawalPhase2Custom,
+    tooltip = TheAlcoholic_MaxWithdrawalPhase2Custom_tooltip,
+}
+
+option TheAlcoholic.UseMaxWithdrawalPhase3Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseMaxWithdrawalPhase3Custom,
+}
+
+option TheAlcoholic.MaxWithdrawalPhase3Custom {
+    type = double,
+    default = 0.7,
+    min = 0.01,
+    max = 1.0,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_MaxWithdrawalPhase3Custom,
+    tooltip = TheAlcoholic_MaxWithdrawalPhase3Custom_tooltip,
+}
+
+option TheAlcoholic.UseMaxWithdrawalPhase4Custom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseMaxWithdrawalPhase4Custom,
+}
+
+option TheAlcoholic.MaxWithdrawalPhase4Custom {
+    type = double,
+    default = 0.9,
+    min = 0.01,
+    max = 1.0,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_MaxWithdrawalPhase4Custom,
+    tooltip = TheAlcoholic_MaxWithdrawalPhase4Custom_tooltip,
 }
