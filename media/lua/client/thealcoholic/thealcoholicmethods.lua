@@ -225,10 +225,16 @@ function TheAlcoholic.alcoholicDrankAlcohol(player)
 end
 
 function TheAlcoholic.drankAlcohol(player)
-    if getTimestampMs() - player:getModData().LastDrinkTimestamp < 5000
+    if getTimestampMs() - player:getModData().LastDrinkTimestamp < math.floor(5000 / getGameTime():getTrueMultiplier())
     then
         return
     end
+
+    if TheAlcoholic.values.DebugMode == true
+    then
+        print("Drank Alcohol")
+    end
+
     player:getModData().LastDrinkTimestamp = getTimestampMs()
 
     player:getModData().AlcoholicHasDrank = true

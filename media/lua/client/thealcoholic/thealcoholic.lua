@@ -237,7 +237,7 @@ function TheAlcoholic.onTraitUpdate()
 end
 
 function TheAlcoholic.onStressCheck(ticks)
-    if math.fmod(ticks, stressTickDelta) ~= 0 then return end
+    if math.fmod( ticks, math.floor(stressTickDelta / getGameTime():getTrueMultiplier()) ) ~= 0 then return end
     for i=0, getNumActivePlayers()-1 do
         local player = getSpecificPlayer(i)
         if player and player:isAlive()
@@ -337,6 +337,10 @@ local base_perform_eat = ISEatFoodAction.perform
 
 function ISEatFoodAction:perform()
     base_perform_eat(self)
+    if TheAlcoholic.values.DebugMode == true
+    then
+        print("The Alcoholic: ISEatFoodAction:perform()")
+    end
     if self.item:isAlcoholic()
     then
         TheAlcoholic.drankAlcohol(self.character)
