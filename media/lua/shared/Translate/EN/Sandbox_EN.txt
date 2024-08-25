@@ -181,6 +181,8 @@ Sandbox_EN = {
     Sandbox_TheAlcoholic_UseMaxStressCustom = "Use Custom Max Alcoholic Stress",
     Sandbox_TheAlcoholic_MaxStressCustom = "Custom Max Alcoholic Stress",
     Sandbox_TheAlcoholic_MaxStressCustom_tooltip = "Max Alcoholic Stress",
+    Sandbox_TheAlcoholic_StressDeltaTime = "Stress Delta Time",
+    Sandbox_TheAlcoholic_StressDeltaTime_tooltip = "Stress Delta Time in ms. [Min=250] [Max=60000]",
     Sandbox_TheAlcoholic_DebugMode = "*DEV* DEBUG MODE *DO NOT USE*",
     Sandbox_TheAlcoholic_DebugMode_tooltip = "*WARNING* *WARNING* THIS WILL BREAK YOUR GAME. DO NOT ENABLE. FOR DEBUGGING PURPOSES ONLY!",
     Sandbox_TheAlcoholic_UseMaxWithdrawalPhase1Custom = "Use Custom Max Withdrawal for Phase 1",

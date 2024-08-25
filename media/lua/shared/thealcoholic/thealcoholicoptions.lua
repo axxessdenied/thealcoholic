@@ -1,32 +1,9 @@
 -- (c) 2024 - axxessdenied [Nick Slusarczyk]
 
 TheAlcoholic = TheAlcoholic or {}
+TheAlcoholic.values = {}
 
--- values for the mod
-TheAlcoholic.values = {
-    spawnitem = {"Nothing", "Base.BeerEmpty", "Base.BeerBottle", "Base.BeerCan", "Base.WhiskeyFull", "Base.Wine", "Base.Wine2", "Base.WineEmpty", "Base.WineEmpty2", "Base.WhiskeyEmpty"},
-    threshold_build_max = { 0.1, 0.15, 0.20 },      --threshold build max
-    base_tolerance = { 0.65, 0.60, 0.55 },          --base tolerance
-    tolerance_drinks_per_day = { 8, 10, 12, 15 },   --tolerance drinks per day
-    stress_per_drink = { 0.10, 0.15, 0.25, 0.50 },  --stress removed per drink
-    happiness_per_drink = { 10, 15, 25, 50 },       --happiness per drink
-    pain_per_drink = { 10, 15, 25, 50 },            --pain per drink
-    withdrawal_phase1 = {12,18,24,48},              --phase 1
-    withdrawal_phase2 = {24,48,72,96},              --phase 2
-    withdrawal_phase3 = {48,72,96,120},             --phase 3
-    withdrawal_phase4 = {72,96,120,144,168},        --phase 4
-    daystolose = {504,672,1344,1920},               --sober values
-    thresholdtogain = {200,400,800,1600},           --threshold values
-    poisondmg = {25,35,45,55},                         --poison values
-    headachedmg = {30,50,65,80},                    --headache values
-    headachechance = {10,7,5,3},                    --headache chance
-    withdrawal_chance = {10,7,5,2},                 --withdrawal sickness chance
-    withdrawal_rate = {0.001,0.002,0.003,0.004},    --withdrawal rate
-    max_withdrawal = {0.3,0.5,0.7,1.0},             --max withdrawal
-    withdrawal_deathchance = {100,50,25,10},        --withdrawal death chance
-    withdrawal_poisonchance = {50,20,10,4},         --withdrawal poison chance
-    maxstress = {0.3,0.5,0.7,0.9},                  --max alcoholic stress
-}
+--todo create some presets for settings
 
 local bV = {
     SpawnItem = {"Nothing", "Base.BeerEmpty", "Base.BeerBottle", "Base.BeerCan", "Base.WhiskeyFull", "Base.Wine", "Base.Wine2", "Base.WineEmpty", "Base.WineEmpty2", "Base.WhiskeyEmpty"},
@@ -53,42 +30,45 @@ local bV = {
     MaxStress = {0.3,0.5,0.7,0.9},                  --max alcoholic stress
 }
 
-function TheAlcoholic.OnInitModData()
-    -- load sandbox options
-    TheAlcoholic.options = {
-        spawnitem = getSandboxOptions():getOptionByName("TheAlcoholic.SpawnItem"):getValue(),
-        headaches = getSandboxOptions():getOptionByName("TheAlcoholic.Headaches"):getValue(),
-        withdrawal = getSandboxOptions():getOptionByName("TheAlcoholic.Withdrawal"):getValue(),
-        dynamic = getSandboxOptions():getOptionByName("TheAlcoholic.Dynamic"):getValue(),
-        tolerance = getSandboxOptions():getOptionByName("TheAlcoholic.Tolerance"):getValue(),
-        happiness = getSandboxOptions():getOptionByName("TheAlcoholic.Happiness"):getValue(),
-        poison = getSandboxOptions():getOptionByName("TheAlcoholic.Poison"):getValue(),
-        tolerance_build_max = getSandboxOptions():getOptionByName("TheAlcoholic.ToleranceBuildMax"):getValue(),
-        tolerance_drinks_per_day = getSandboxOptions():getOptionByName("TheAlcoholic.ToleranceDrinksPerDay"):getValue(),
-        base_tolerance = getSandboxOptions():getOptionByName("TheAlcoholic.BaseTolerance"):getValue(),
-        stress_per_drink = getSandboxOptions():getOptionByName("TheAlcoholic.StressPerDrink"):getValue(),
-        happiness_per_drink = getSandboxOptions():getOptionByName("TheAlcoholic.HappinessPerDrink"):getValue(),
-        pain_per_drink = getSandboxOptions():getOptionByName("TheAlcoholic.PainPerDrink"):getValue(),
-        withdrawal_phase1 = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalPhase1"):getValue(),
-        withdrawal_phase2 = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalPhase2"):getValue(),
-        withdrawal_phase3 = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalPhase3"):getValue(),
-        withdrawal_phase4 = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalPhase4"):getValue(),
-        daystolose = getSandboxOptions():getOptionByName("TheAlcoholic.DaysToLose"):getValue(),
-        thresholdtogain = getSandboxOptions():getOptionByName("TheAlcoholic.ThresholdToGain"):getValue(),
-        poisondmg = getSandboxOptions():getOptionByName("TheAlcoholic.PoisonDamage"):getValue(),
-        headachedmg = getSandboxOptions():getOptionByName("TheAlcoholic.HeadacheDamage"):getValue(),
-        headachechance = getSandboxOptions():getOptionByName("TheAlcoholic.HeadacheChance"):getValue(),
-        withdrawal_chance = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalChance"):getValue(),
-        withdrawal_rate = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalRate"):getValue(),
-        withdrawal_deathchance = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalDeathChance"):getValue(),
-        withdrawal_poisonchance = getSandboxOptions():getOptionByName("TheAlcoholic.WithdrawalPoisonChance"):getValue(),
-        maxstress = getSandboxOptions():getOptionByName("TheAlcoholic.MaxStress"):getValue(),
-        debugmode = getSandboxOptions():getOptionByName("TheAlcoholic.DebugMode"):getValue(),
-    }
+local defaults = {
+    SpawnItem = "Base.BeerEmpty",
+    Headaches = true,
+    Withdrawal = true,
+    Dynamic = true,
+    Tolerance = true,
+    Happiness = true,
+    Poison = true,
+    ToleranceBuildMax = 0.1,
+    ToleranceDrinksPerDay = 8,
+    BaseTolerance = 0.65,
+    StressPerDrink = 0.10,
+    HappinessPerDrink = 10,
+    PainPerDrink = 10,
+    WithdrawalPhase1 = 12,
+    WithdrawalPhase2 = 24,
+    WithdrawalPhase3 = 48,
+    WithdrawalPhase4 = 72,
+    DaysToLose = 504,
+    ThresholdToGain = 200,
+    PoisonDamage = 25,
+    HeadacheDamage = 30,
+    HeadacheChance = 10,
+    WithdrawalChance = 10,
+    WithdrawalRate = 0.001,
+    WithdrawalDeathChance = 100,
+    WithdrawalPoisonChance = 50,
+    MaxStress = 0.3,
+    DebugMode = false,
+    MaxWithdrawal = {0.3,0.5,0.7,1.0},
+    StressDeltaTime = 0.1,
+}
 
+function TheAlcoholic.OnInitModData()
     TheAlcoholic.sBVars = SandboxVars.TheAlcoholic
     
     local sBVars = TheAlcoholic.sBVars
+
+    TheAlcoholic.values = defaults
     
     -- set the values
     TheAlcoholic.values.SpawnItem               =       sBVars.UseSpawnItemCustom and sBVars.SpawnItemCustom or bV.SpawnItem[sBVars.SpawnItem]
@@ -125,6 +105,7 @@ function TheAlcoholic.OnInitModData()
         sBVars.UseCustomWithdrawalPhase3Custom and sBVars.WithdrawalPhase3Custom or bV.WithdrawalPhase3[sBVars.WithdrawalPhase3],
         sBVars.UseCustomWithdrawalPhase4Custom and sBVars.WithdrawalPhase4Custom or bV.WithdrawalPhase4[sBVars.WithdrawalPhase4],
     }
+    TheAlcoholic.values.StressDeltaTime         =       sBVars.StressDeltaTime
 end
 
 Events.OnInitGlobalModData.Add(TheAlcoholic.OnInitModData)
