@@ -41,7 +41,8 @@ function TheAlcoholic.increaseStress(player, stress)
 end
 
 function TheAlcoholic.decreaseStress(player, stress)
-    local currentStress = player:getStats():getStress() - player:getStats():getStressFromCigarettes() 
+    print("decreasing stress by " .. stress)
+    local currentStress = player:getStats():getStress() - player:getStats():getStressFromCigarettes()
 
     if currentStress < stress
     then

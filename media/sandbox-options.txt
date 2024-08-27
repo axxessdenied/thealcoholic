@@ -213,9 +213,9 @@ option TheAlcoholic.MaxStress {
 
 option TheAlcoholic.StressDeltaTime {
     type = integer,
-    default = 5000,
-    min = 250,
-    max = 60000,
+    default = 10,
+    min = 1,
+    max = 60,
     page = TheAlcoholic,
     translation = TheAlcoholic_StressDeltaTime,
     tooltip = TheAlcoholic_StressDeltaTime_tooltip,

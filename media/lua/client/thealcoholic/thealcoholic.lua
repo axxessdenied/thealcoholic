@@ -1,6 +1,8 @@
 -- (c) 2024 - axxessdenied [Nick Slusarczyk]
 
-local stressTickDelta = 5 * 60 -- default 5 seconds
+local stressTickDelta = 5
+local timeSinceLastStressCheck = 0
+local timeStressAdd = 1
 
 local function init(player)
     -- hours since last drink
@@ -88,23 +90,6 @@ function TheAlcoholic.onCreatePlayer(playernum, character)
         if TheAlcoholic.sBVars.SpawnItem > 1 or TheAlcoholic.values.UseSpawnItemCustom -- 1 is nothing
         then
             player:getInventory():AddItem(TheAlcoholic.values.SpawnItem)
-        end
-    end
-end
-
--- update event to support the mod being added to an existing game
-function TheAlcoholic.onBoot()
-    for i=0, getNumActivePlayers()-1 do
-        local player = getSpecificPlayer(i)
-        if player
-        then
-            if player:getModData().AlcoholicInit == nil
-            then
-                init(player)
-            elseif player:getModData().AlcoholicInit2 == nil
-            then
-                init2(player)
-            end
         end
     end
 end
@@ -236,8 +221,15 @@ function TheAlcoholic.onTraitUpdate()
     end
 end
 
-function TheAlcoholic.onStressCheck(ticks)
-    if math.fmod( ticks, math.floor(stressTickDelta / getGameTime():getTrueMultiplier()) ) ~= 0 then return end
+function TheAlcoholic.onStressCheck()
+    print("The Alcoholic: Stress check")
+    if stressTickDelta % timeSinceLastStressCheck ~= 0
+    then
+        timeSinceLastStressCheck = timeSinceLastStressCheck + timeStressAdd
+        return
+    end
+
+    timeSinceLastStressCheck = stressTickDelta % 60 == 0 and 60 or 0
     for i=0, getNumActivePlayers()-1 do
         local player = getSpecificPlayer(i)
         if player and player:isAlive()
@@ -245,6 +237,36 @@ function TheAlcoholic.onStressCheck(ticks)
             if player:HasTrait("Alcoholic")
             then
                 TheAlcoholic.alcoholicStress(player)
+            end
+        end
+    end
+end
+
+
+-- update event to support the mod being added to an existing game
+function TheAlcoholic.onLoad()
+    stressTickDelta = TheAlcoholic.sBVars.StressDeltaTime
+    if stressTickDelta % 60 == 0
+    then
+        timeStressAdd = 60
+        Events.EveryHours.Add(TheAlcoholic.onStressCheck)
+    elseif stressTickDelta % 10 == 0
+    then
+        timeStressAdd = stressTickDelta / 10
+        Events.EveryTenMinutes.Add(TheAlcoholic.onStressCheck)
+    else
+        Events.EveryOneMinute.Add(TheAlcoholic.onStressCheck)
+    end
+    for i=0, getNumActivePlayers()-1 do
+        local player = getSpecificPlayer(i)
+        if player
+        then
+            if player:getModData().AlcoholicInit == nil
+            then
+                init(player)
+            elseif player:getModData().AlcoholicInit2 == nil
+            then
+                init2(player)
             end
         end
     end
@@ -325,8 +347,7 @@ end
 -- SET EVENT HANDLERS
 
 Events.OnCreatePlayer.Add(TheAlcoholic.onCreatePlayer)
-Events.OnGameBoot.Add(TheAlcoholic.onBoot)
-Events.OnTick.Add(TheAlcoholic.onStressCheck)
+Events.OnLoad.Add(TheAlcoholic.onLoad)
 Events.EveryTenMinutes.Add(TheAlcoholic.onWithdrawalSickness)
 Events.EveryHours.Add(TheAlcoholic.onTraitUpdate)
 Events.EveryDays.Add(TheAlcoholic.onDailyUpdate)
