@@ -189,7 +189,7 @@ option TheAlcoholic.WithdrawalRate {
 
 option TheAlcoholic.WithdrawalDeathChance {
     type = enum,
-    numValues = 4,
+    numValues = 5,
     default = 2,
     page = TheAlcoholic,
     translation = TheAlcoholic_WithdrawalDeathChance,

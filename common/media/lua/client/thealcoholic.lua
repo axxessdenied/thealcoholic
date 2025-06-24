@@ -94,6 +94,20 @@ function TheAlcoholic.onCreatePlayer(playernum, character)
     end
 end
 
+-- new game / new character event
+function TheAlcoholic.onNewGame(player, square)
+    init(player)
+    init2(player)
+
+    if player:HasTrait("Alcoholic")
+    then
+        if TheAlcoholic.sBVars.SpawnItem > 1 or TheAlcoholic.values.UseSpawnItemCustom -- 1 is nothing
+        then
+            player:getInventory():AddItem(TheAlcoholic.values.SpawnItem)
+        end
+    end
+end
+
 -- update event to handle the alcoholic trait
 function TheAlcoholic.onTraitUpdate()
     local values = TheAlcoholic.values
@@ -332,10 +346,13 @@ function TheAlcoholic.onWithdrawalSickness()
                     end
                     if sickness > 0.90
                     then
-                        if 0 == ZombRand(values.WithdrawalDeathChance)
+                        if values.WithdrawalDeathChance > 0
                         then
-                            print(player:getUsername().." died from withdrawal sickness")
-                            player:die()
+                            if 0 == ZombRand(values.WithdrawalDeathChance)
+                            then
+                                print(player:getUsername().." died from withdrawal sickness")
+                                player:die()
+                            end
                         end
                     end
                 end
@@ -346,24 +363,28 @@ end
 
 -- SET EVENT HANDLERS
 
-Events.OnCreatePlayer.Add(TheAlcoholic.onCreatePlayer)
+--Events.OnCreatePlayer.Add(TheAlcoholic.onCreatePlayer)
+Events.OnNewGame.Add(TheAlcoholic.onNewGame)
 Events.OnLoad.Add(TheAlcoholic.onLoad)
 Events.EveryTenMinutes.Add(TheAlcoholic.onWithdrawalSickness)
 Events.EveryHours.Add(TheAlcoholic.onTraitUpdate)
 Events.EveryDays.Add(TheAlcoholic.onDailyUpdate)
 
 -- ACTIONS
+--[[
+local base_perform_eat = ISDrinkFromBottle.perform
 
-local base_perform_eat = ISEatFoodAction.perform
-
-function ISEatFoodAction:perform()
+function ISDrinkFromBottle:perform()
     base_perform_eat(self)
     if TheAlcoholic.values.DebugMode == true
     then
-        print("The Alcoholic: ISEatFoodAction:perform()")
+        print("The Alcoholic: ISDrinkFromBottle:perform()")
     end
     if self.item:isAlcoholic()
     then
+        print("The Alcoholic: ISDrinkFromBottle:perform()")
+        character:Say("Ahh, that hits the spot!")
         TheAlcoholic.drankAlcohol(self.character)
     end
 end
+]]

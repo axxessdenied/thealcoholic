@@ -25,7 +25,7 @@ local bV = {
     WithdrawalChance = {10,7,5,2},                  --withdrawal sickness chance
     WithdrawalRate = {0.001,0.002,0.003,0.004},     --withdrawal rate
     MaxWithdrawal = {0.3,0.5,0.7,1.0},              --max withdrawal
-    WithdrawalDeathChance = {100,50,25,10},         --withdrawal death chance
+    WithdrawalDeathChance = {100,50,25,10,0},         --withdrawal death chance
     WithdrawalPoisonChance = {50,20,10,4},          --withdrawal poison chance
     MaxStress = {0.3,0.5,0.7,0.9},                  --max alcoholic stress
 }

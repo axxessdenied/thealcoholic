@@ -162,6 +162,7 @@ Sandbox_EN = {
     Sandbox_TheAlcoholic_WithdrawalDeathChance_option2 = "Medium",
     Sandbox_TheAlcoholic_WithdrawalDeathChance_option3 = "High",
     Sandbox_TheAlcoholic_WithdrawalDeathChance_option4 = "Very High",
+    Sandbox_TheAlcoholic_WithdrawalDeathChance_option5 = "Off",
     Sandbox_TheAlcoholic_UseWithdrawalDeathChanceCustom = "Use Custom Withdrawal chance to kill player",
     Sandbox_TheAlcoholic_WithdrawalDeathChanceCustom = "Custom Withdrawal chance to kill player",
     Sandbox_TheAlcoholic_WithdrawalDeathChanceCustom_tooltip = "Withdrawal chance to kill player",
