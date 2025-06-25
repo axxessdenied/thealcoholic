@@ -116,6 +116,7 @@ function TheAlcoholic.onTraitUpdate()
     local headacheChance = values.HeadacheChance
     for i=0, getNumActivePlayers()-1 do
         local player = getSpecificPlayer(i)
+        print("The Alcoholic: Trait update for player: "..tostring(player:getUsername()))
         if player and player:isAlive()
         then
             if player:getModData().AlcoholicHasDrank == true
@@ -129,7 +130,11 @@ function TheAlcoholic.onTraitUpdate()
 
                 local timeSinceDrink = player:getModData().AlcoholicTimeSinceLastDrink
                 local alcoholicTolerance = player:getModData().AlcoholicTolerance
-                
+                if timeSinceDrink >= values.HoursToCraveDrink
+                then
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic_Crave"), true, HaloTextHelper.getColorRed())
+                    TheAlcoholic.increaseStress(player, 0.01 * timeSinceDrink)
+                end
                 if timeSinceDrink > values.WithdrawalPhase1 and timeSinceDrink <= values.WithdrawalPhase2
                 then
                     if player:getModData().AlcoholicWithdrawalPhase == 0
@@ -228,7 +233,7 @@ function TheAlcoholic.onTraitUpdate()
                 if player:getModData().AlcoholicThreshold > values.ThresholdToGain  and values.Dynamic == true
                 then
                     player:getTraits():add("Alcoholic")
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_Alcoholic"), true, HaloTextHelper.getColorRed())
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_AlcoholicGain"), true, HaloTextHelper.getColorRed())
                 end
             end
         end

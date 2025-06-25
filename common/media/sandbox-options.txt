@@ -99,6 +99,14 @@ option TheAlcoholic.PainPerDrink {
     translation = TheAlcoholic_PainPerDrink,
 }
 
+option TheAlcoholic.HoursToCraveDrink {
+    type = enum,
+    numValues = 4,
+    default = 2,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HoursToCraveDrink,
+}
+
 option TheAlcoholic.WithdrawalPhase1 {
     type = enum,
     numValues = 4,
@@ -344,6 +352,23 @@ option TheAlcoholic.PainPerDrinkCustom {
     page = TheAlcoholic,
     translation = TheAlcoholic_PainPerDrinkCustom,
     tooltip = TheAlcoholic_PainPerDrinkCustom_tooltip,
+}
+
+option TheAlcoholic.UseHoursToCraveDrinkCustom {
+    type = boolean,
+    default = false,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_UseHoursToCraveDrinkCustom,
+}
+
+option TheAlcoholic.HoursToCraveDrinkCustom {
+    type = integer,
+    default = 2,
+    min = 1,
+    max = 12,
+    page = TheAlcoholic,
+    translation = TheAlcoholic_HoursToCraveDrinkCustom,
+    tooltip = TheAlcoholic_HoursToCraveDrinkCustom_tooltip,
 }
 
 option TheAlcoholic.UseWithdrawalPhase1Custom {

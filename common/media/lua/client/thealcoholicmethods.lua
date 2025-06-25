@@ -142,6 +142,46 @@ function TheAlcoholic.increasePoison(player, poison, chance)
     end
 end
 
+function TheAlcoholic.decreaseMorale(player, morale)
+    local currentMorale = player:getStats():getMorale()
+    if currentMorale < morale
+    then
+        player:getStats():setMorale(0)
+    else
+        player:getStats():setMorale(currentMorale - morale)
+    end
+end
+
+function TheAlcoholic.increaseMorale(player, morale)
+    local currentMorale = player:getStats():getMorale()
+    if currentMorale + morale > 99
+    then
+        player:getStats():setMorale(100)
+    else
+        player:getStats():setMorale(currentMorale + morale)
+    end
+end
+
+function TheAlcoholic.decreaseAnger(player, anger)
+    local currentAnger = player:getStats():getAnger()
+    if currentAnger < anger
+    then
+        player:getStats():setAnger(0)
+    else
+        player:getStats():setAnger(currentAnger - anger)
+    end
+end
+
+function TheAlcoholic.increaseAnger(player, anger)
+    local currentAnger = player:getStats():getAnger()
+    if currentAnger + anger > 99
+    then
+        player:getStats():setAnger(100)
+    else
+        player:getStats():setAnger(currentAnger + anger)
+    end
+end
+
 function TheAlcoholic.increaseWithdrawalSickness(player, sickness, chance)
     if chance == 0
     then
